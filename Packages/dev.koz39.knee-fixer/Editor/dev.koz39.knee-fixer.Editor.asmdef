@@ -1,0 +1,20 @@
+{
+    "name": "dev.koz39.knee-fixer.Editor",
+    "rootNamespace": "KOZ39.KneeFixer",
+    "references": [
+        "dev.koz39.knee-fixer",
+        "nadena.dev.ndmf",
+        "VRC.SDK3A"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

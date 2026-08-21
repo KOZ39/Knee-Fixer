@@ -1,0 +1,33 @@
+{
+  "name": "dev.koz39.knee-fixer",
+  "displayName": "Knee Fixer",
+  "version": "2.1.0",
+  "unity": "2022.3",
+  "vpmDependencies": {
+    "com.vrchat.avatars": ">=3.7.3 <4.0.0",
+    "nadena.dev.ndmf": ">=1.5.0 <2.0.0"
+  },
+  "author": {
+    "name": "KOZ39",
+    "email": "koz39c@gmail.com",
+    "url": "https://github.com/KOZ39"
+  },
+  "legacyFolders": {
+    "Assets/KOZ39/KneeFixer/Editor": "af61839ef0ef0eb4a81d6ee2039cf06b",
+    "Assets/KOZ39/KneeFixer/Runtime": "e59a29eb5ba5d5b4f99ddd1247587aaa"
+  },
+  "legacyFiles": {
+    "Assets/KOZ39/KneeFixer/Presets/Chiffon.asset": "8eb0ecd8434284a4a90f4d49e80fa297",
+    "Assets/KOZ39/KneeFixer/Presets/Chocolat.asset": "abdf0b0685d66e54984b9516e206f713",
+    "Assets/KOZ39/KneeFixer/Presets/Ichigo.asset": "f7a3b9b7dcf836247a9e36243f34d94e",
+    "Assets/KOZ39/KneeFixer/Presets/Karin.asset": "95a7bfb91dd2bdd49ba42f28331a7725",
+    "Assets/KOZ39/KneeFixer/Presets/Lime.asset": "5904f074c29a45645b4f911e23614ded",
+    "Assets/KOZ39/KneeFixer/Presets/Manuka v2.asset": "c27ab0ffa1d14844595bc8cab078c7d5",
+    "Assets/KOZ39/KneeFixer/Presets/Manuka.asset": "3f14a6c5abd29f24bb2d34f584c122c9",
+    "Assets/KOZ39/KneeFixer/Presets/Milfy.asset": "85519fcf2844f5e45a3232fa1bb906d8",
+    "Assets/KOZ39/KneeFixer/Presets/Plum.asset": "b7bebf63bef666a4c8e3c074ed063378",
+    "Assets/KOZ39/KneeFixer/Presets/Rinasciita.asset": "262ba93eea9c8874b99953c7e473bd00",
+    "Assets/KOZ39/KneeFixer/Presets/Riru.asset": "673080158c62734479d4d14459cc5a7f",
+    "Assets/KOZ39/KneeFixer/KneeFixer.prefab": "1d607e66b62f63f49b42d26a089f7c7c"
+  }
+}
