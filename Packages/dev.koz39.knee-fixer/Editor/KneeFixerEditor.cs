@@ -62,9 +62,13 @@ namespace KOZ39.KneeFixer
             serializedObject.Update();
 
             DrawInfo();
-            DrawDuplicateWarning();
-            DrawPresetPopup();
-            DrawKneeDepth();
+            var hasInactiveFixer = DrawDuplicateWarning();
+
+            using (new EditorGUI.DisabledScope(hasInactiveFixer))
+            {
+                DrawPresetPopup();
+                DrawKneeDepth();
+            }
 
             serializedObject.ApplyModifiedProperties();
         }
@@ -77,7 +81,7 @@ namespace KOZ39.KneeFixer
             EditorGUILayout.Space();
         }
 
-        private void DrawDuplicateWarning()
+        private bool DrawDuplicateWarning()
         {
             var hasActive = false;
             var hasInactive = false;
@@ -124,6 +128,8 @@ namespace KOZ39.KneeFixer
             }
 
             if (hasActive || hasInactive) EditorGUILayout.Space();
+
+            return hasInactive;
         }
 
         private static void DrawWarning(string message, List<KneeFixer> fixers)
