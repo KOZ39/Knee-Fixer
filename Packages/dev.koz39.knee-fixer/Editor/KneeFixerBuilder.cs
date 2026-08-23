@@ -26,14 +26,14 @@ namespace KOZ39.KneeFixer
             HumanBodyBones upperBone,
             HumanBodyBones lowerBone,
             string side,
-            float depth)
+            float kneeDepth)
         {
             var upper = animator.GetBoneTransform(upperBone);
             var lower = animator.GetBoneTransform(lowerBone);
 
             if (upper == null || lower == null) return;
 
-            var knee = CreateKnee(upper, lower, side, depth, animator.transform);
+            var knee = CreateKnee(upper, lower, side, kneeDepth, animator.transform);
             var target = CreateTarget(lower, knee);
 
             SetupConstraints(knee, lower, target);
@@ -43,12 +43,12 @@ namespace KOZ39.KneeFixer
             Transform upper,
             Transform lower,
             string side,
-            float depth,
+            float kneeDepth,
             Transform avatarRoot)
         {
             var knee = new GameObject($"Knee.{side}");
 
-            var position = CalculateKneePosition(avatarRoot, lower.position, depth);
+            var position = CalculateKneePosition(avatarRoot, lower.position, kneeDepth);
 
             knee.transform.SetPositionAndRotation(position, lower.rotation);
             knee.transform.SetParent(upper, true);
@@ -61,10 +61,10 @@ namespace KOZ39.KneeFixer
             Vector3 worldPosition,
             float localDepth)
         {
-            var local = avatarRoot.InverseTransformPoint(worldPosition);
-            local.z = localDepth;
+            var localPosition = avatarRoot.InverseTransformPoint(worldPosition);
+            localPosition.z = localDepth;
 
-            return avatarRoot.TransformPoint(local);
+            return avatarRoot.TransformPoint(localPosition);
         }
 
         private static GameObject CreateTarget(Transform lower, GameObject knee)
