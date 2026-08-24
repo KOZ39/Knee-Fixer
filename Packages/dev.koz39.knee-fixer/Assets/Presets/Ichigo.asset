@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8015d3e106e1b948bb1d7b702195da5, type: 3}
   m_Name: Ichigo
   m_EditorClassIdentifier: 
-  DisplayName: "Ichigo (\u30A4\u30C1\u30B4)"
+  displayName: "Ichigo (\u30A4\u30C1\u30B4)"
   kneeDepth: 0.01

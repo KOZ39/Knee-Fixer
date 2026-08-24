@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8015d3e106e1b948bb1d7b702195da5, type: 3}
   m_Name: Chiffon
   m_EditorClassIdentifier: 
-  DisplayName: "Chiffon (\u30B7\u30D5\u30A9\u30F3)"
+  displayName: "Chiffon (\u30B7\u30D5\u30A9\u30F3)"
   kneeDepth: -0.01

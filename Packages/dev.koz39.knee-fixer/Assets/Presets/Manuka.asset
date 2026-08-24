@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8015d3e106e1b948bb1d7b702195da5, type: 3}
   m_Name: Manuka
   m_EditorClassIdentifier: 
-  DisplayName: "Manuka (\u30DE\u30CC\u30AB)"
+  displayName: "Manuka (\u30DE\u30CC\u30AB)"
   kneeDepth: 0.01

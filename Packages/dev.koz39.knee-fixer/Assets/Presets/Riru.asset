@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8015d3e106e1b948bb1d7b702195da5, type: 3}
   m_Name: Riru
   m_EditorClassIdentifier: 
-  DisplayName: "Riru (\u308A\u308B)"
+  displayName: "Riru (\u308A\u308B)"
   kneeDepth: 0.01
