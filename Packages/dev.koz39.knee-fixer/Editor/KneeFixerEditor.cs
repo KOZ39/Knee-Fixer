@@ -62,7 +62,7 @@ namespace KOZ39.KneeFixer
             serializedObject.Update();
 
             DrawInfo();
-            var hasInactiveFixer = DrawDuplicateWarning();
+            var hasInactiveFixer = DrawDuplicateWarnings();
 
             using (new EditorGUI.DisabledScope(hasInactiveFixer))
             {
@@ -81,7 +81,26 @@ namespace KOZ39.KneeFixer
             EditorGUILayout.Space();
         }
 
-        private bool DrawDuplicateWarning()
+        private bool DrawDuplicateWarnings()
+        {
+            var (hasActiveFixer, hasInactiveFixer, duplicateFixers) =
+                GetDuplicateInfo();
+
+            if (duplicateFixers.Count == 0) return false;
+
+            if (hasActiveFixer)
+                DrawWarning(GetDuplicateWarningMessage(true), duplicateFixers);
+
+            if (hasInactiveFixer)
+                DrawWarning(GetDuplicateWarningMessage(false), duplicateFixers);
+
+            EditorGUILayout.Space();
+
+            return hasInactiveFixer;
+        }
+
+        private (bool hasActive, bool hasInactive, List<KneeFixer> fixers)
+            GetDuplicateInfo()
         {
             var hasActive = false;
             var hasInactive = false;
@@ -93,7 +112,7 @@ namespace KOZ39.KneeFixer
 
                 if (avatarRoot == null) continue;
 
-                var activeFixer = KneeFixerUtility.FindActive(avatarRoot, out var fixers);
+                var (activeFixer, fixers) = KneeFixerUtility.FindActive(avatarRoot);
 
                 if (fixers.Length < 2) continue;
 
@@ -109,27 +128,17 @@ namespace KOZ39.KneeFixer
                     hasInactive = true;
             }
 
-            if (hasActive)
-            {
-                var message = targets.Length == 1
-                    ? "Multiple Knee Fixers found. This one will be used."
-                    : "Multiple Knee Fixers found. Some selected ones will be used.";
+            return (hasActive, hasInactive, duplicateFixers);
+        }
 
-                DrawWarning(message, duplicateFixers);
-            }
+        private string GetDuplicateWarningMessage(bool isActiveFixer)
+        {
+            var subject = targets.Length == 1
+                ? "This one"
+                : "Some selected ones";
+            var result = isActiveFixer ? "used" : "ignored";
 
-            if (hasInactive)
-            {
-                var message = targets.Length == 1
-                    ? "Multiple Knee Fixers found. This one will be ignored."
-                    : "Multiple Knee Fixers found. Some selected ones will be ignored.";
-
-                DrawWarning(message, duplicateFixers);
-            }
-
-            if (hasActive || hasInactive) EditorGUILayout.Space();
-
-            return hasInactive;
+            return $"Multiple Knee Fixers found. {subject} will be {result}.";
         }
 
         private static void DrawWarning(string message, List<KneeFixer> fixers)

@@ -22,15 +22,11 @@ namespace KOZ39.KneeFixer
             return null;
         }
 
-        public static KneeFixer FindActive(
-            GameObject avatarRoot,
-            out KneeFixer[] fixers)
+        public static (KneeFixer active, KneeFixer[] fixers) FindActive(
+            GameObject avatarRoot)
         {
             if (avatarRoot == null)
-            {
-                fixers = Array.Empty<KneeFixer>();
-                return null;
-            }
+                return (null, Array.Empty<KneeFixer>());
 
             var foundFixers = new List<KneeFixer>();
             KneeFixer activeFixer = null;
@@ -44,8 +40,7 @@ namespace KOZ39.KneeFixer
                 ref activeFixer,
                 ref activeDepth);
 
-            fixers = foundFixers.ToArray();
-            return activeFixer;
+            return (activeFixer, foundFixers.ToArray());
         }
 
         private static void FindActive(

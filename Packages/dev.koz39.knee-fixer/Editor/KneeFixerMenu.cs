@@ -78,7 +78,7 @@ namespace KOZ39.KneeFixer
 
         private static GameObject SetupAvatar(GameObject target, GameObject prefab)
         {
-            var activeFixer = KneeFixerUtility.FindActive(target, out _);
+            var (activeFixer, _) = KneeFixerUtility.FindActive(target);
 
             if (activeFixer != null)
             {
