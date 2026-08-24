@@ -1,7 +1,7 @@
 {
   "name": "dev.koz39.knee-fixer",
   "displayName": "Knee Fixer",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "unity": "2022.3",
   "vpmDependencies": {
     "com.vrchat.avatars": ">=3.7.3 <4.0.0",
