@@ -12,6 +12,8 @@
     "email": "koz39c@gmail.com",
     "url": "https://github.com/KOZ39"
   },
+  "license": "MIT-0",
+  "licensesUrl": "https://github.com/KOZ39/Knee-Fixer/blob/main/LICENSE",
   "legacyFolders": {
     "Assets/KOZ39/KneeFixer/Editor": "af61839ef0ef0eb4a81d6ee2039cf06b",
     "Assets/KOZ39/KneeFixer/Runtime": "e59a29eb5ba5d5b4f99ddd1247587aaa"
