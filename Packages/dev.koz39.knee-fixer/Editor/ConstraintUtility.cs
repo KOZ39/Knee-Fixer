@@ -6,17 +6,14 @@ namespace KOZ39.KneeFixer
 {
     internal static class ConstraintUtility
     {
-        private const float RotationWeight = 0.5f;
-        private const float PositionWeight = 1f;
-
         public static void SetupRotationConstraint(GameObject target, Transform source)
         {
-            SetupConstraint<VRCRotationConstraint>(target, source, RotationWeight);
+            SetupConstraint<VRCRotationConstraint>(target, source, 0.5f);
         }
 
         public static void SetupPositionConstraint(GameObject target, Transform source)
         {
-            SetupConstraint<VRCPositionConstraint>(target, source, PositionWeight);
+            SetupConstraint<VRCPositionConstraint>(target, source, 1f);
         }
 
         private static void SetupConstraint<T>(

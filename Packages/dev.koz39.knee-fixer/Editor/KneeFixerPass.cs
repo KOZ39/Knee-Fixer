@@ -1,5 +1,5 @@
-using UnityEngine;
 using nadena.dev.ndmf;
+using UnityEngine;
 
 namespace KOZ39.KneeFixer
 {
@@ -11,14 +11,16 @@ namespace KOZ39.KneeFixer
 
             if (animator == null || !animator.isHuman) return;
 
-            var (activeFixer, fixers) = KneeFixerUtility.FindActive(
-                ctx.AvatarRootObject);
+            var (activeFixer, fixers) = KneeFixerUtility.FindActive(ctx.AvatarRootObject);
 
             if (activeFixer == null) return;
 
             KneeFixerBuilder.Build(animator, activeFixer);
 
-            foreach (var fixer in fixers) Object.DestroyImmediate(fixer);
+            foreach (var fixer in fixers)
+            {
+                Object.DestroyImmediate(fixer);
+            }
         }
     }
 }

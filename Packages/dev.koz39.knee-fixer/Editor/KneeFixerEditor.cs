@@ -35,7 +35,7 @@ namespace KOZ39.KneeFixer
 
                     if (preset == null)
                         Debug.LogWarning(
-                            $"Failed to load Knee Fixer preset at path: {path} (guid: {guid})");
+                            $"Failed to load a Knee Fixer preset from '{path}' (GUID: {guid}).");
 
                     return preset;
                 })
@@ -73,7 +73,7 @@ namespace KOZ39.KneeFixer
             serializedObject.ApplyModifiedProperties();
         }
 
-        private void DrawInfo()
+        private static void DrawInfo()
         {
             EditorGUILayout.LabelField(
                 $"Version: {KneeFixerPackageInfo.Version}",
@@ -99,8 +99,7 @@ namespace KOZ39.KneeFixer
             return hasInactiveFixer;
         }
 
-        private (bool hasActive, bool hasInactive, List<KneeFixer> fixers)
-            GetDuplicateInfo()
+        private (bool hasActive, bool hasInactive, List<KneeFixer> fixers) GetDuplicateInfo()
         {
             var hasActive = false;
             var hasInactive = false;
@@ -134,11 +133,11 @@ namespace KOZ39.KneeFixer
         private string GetDuplicateWarningMessage(bool isActiveFixer)
         {
             var subject = targets.Length == 1
-                ? "This one"
-                : "Some selected ones";
+                ? "This component"
+                : "Some selected components";
             var result = isActiveFixer ? "used" : "ignored";
 
-            return $"Multiple Knee Fixers found. {subject} will be {result}.";
+            return $"Multiple Knee Fixer components were found. {subject} will be {result}.";
         }
 
         private static void DrawWarning(string message, List<KneeFixer> fixers)
@@ -171,7 +170,8 @@ namespace KOZ39.KneeFixer
             var currentPreset = (KneeFixerPreset)_presetProperty.objectReferenceValue;
             var presetIndex = Array.IndexOf(_presets, currentPreset);
 
-            if (presetIndex < 0) presetIndex = 0;
+            if (presetIndex < 0)
+                presetIndex = 0;
 
             var previousShowMixedValue = EditorGUI.showMixedValue;
             EditorGUI.showMixedValue = hasMixedPresets;
@@ -188,7 +188,8 @@ namespace KOZ39.KneeFixer
 
             _presetProperty.objectReferenceValue = preset;
 
-            if (preset != null) _kneeDepthProperty.floatValue = preset.kneeDepth;
+            if (preset != null)
+                _kneeDepthProperty.floatValue = preset.kneeDepth;
         }
 
         private void DrawKneeDepth()

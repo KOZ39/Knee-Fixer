@@ -32,7 +32,7 @@ namespace KOZ39.KneeFixer
 
             Undo.IncrementCurrentGroup();
             var undoGroup = Undo.GetCurrentGroup();
-            Undo.SetCurrentGroupName($"Setup {KneeFixerPackageInfo.DisplayName}");
+            Undo.SetCurrentGroupName($"Set Up {KneeFixerPackageInfo.DisplayName}");
 
             var instances = new List<GameObject>(targets.Length);
 
@@ -60,30 +60,32 @@ namespace KOZ39.KneeFixer
 
         private static GameObject LoadPrefab()
         {
+            var displayName = KneeFixerPackageInfo.DisplayName;
             var path = AssetDatabase.GUIDToAssetPath(PrefabGuid);
 
             if (string.IsNullOrEmpty(path))
             {
-                Debug.LogError($"Could not locate the {KneeFixerPackageInfo.DisplayName} prefab.");
+                Debug.LogError($"Could not find the {displayName} prefab.");
                 return null;
             }
 
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
 
             if (prefab == null)
-                Debug.LogError($"Failed to load the {KneeFixerPackageInfo.DisplayName} prefab.");
+                Debug.LogError($"Failed to load the {displayName} prefab.");
 
             return prefab;
         }
 
         private static GameObject SetupAvatar(GameObject target, GameObject prefab)
         {
+            var displayName = KneeFixerPackageInfo.DisplayName;
             var (activeFixer, _) = KneeFixerUtility.FindActive(target);
 
             if (activeFixer != null)
             {
                 Debug.LogWarning(
-                    $"Skipped avatar containing {KneeFixerPackageInfo.DisplayName}: {target.name}",
+                    $"Skipped avatar '{target.name}': {displayName} already exists.",
                     target);
                 return null;
             }
@@ -93,12 +95,12 @@ namespace KOZ39.KneeFixer
             if (instance == null)
             {
                 Debug.LogError(
-                    $"Failed to set up {KneeFixerPackageInfo.DisplayName} on {target.name}.",
+                    $"Failed to set up {displayName} on avatar '{target.name}'.",
                     target);
                 return null;
             }
 
-            Undo.RegisterCreatedObjectUndo(instance, $"Setup {KneeFixerPackageInfo.DisplayName}");
+            Undo.RegisterCreatedObjectUndo(instance, $"Set Up {displayName}");
 
             return instance;
         }
@@ -109,7 +111,8 @@ namespace KOZ39.KneeFixer
 
             Selection.objects = instances.ToArray();
 
-            if (instances.Count == 1) EditorGUIUtility.PingObject(instances[0]);
+            if (instances.Count == 1)
+                EditorGUIUtility.PingObject(instances[0]);
         }
     }
 }

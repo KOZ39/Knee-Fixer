@@ -8,7 +8,7 @@ namespace KOZ39.KneeFixer
         private static readonly PackageInfo Info =
             PackageInfo.FindForAssembly(typeof(KneeFixerPackageInfo).Assembly)
             ?? throw new InvalidOperationException(
-                "Knee Fixer package information could not be found.");
+                "Could not find package information for Knee Fixer.");
 
         public static string Name => Info.name;
         public static string DisplayName => Info.displayName;

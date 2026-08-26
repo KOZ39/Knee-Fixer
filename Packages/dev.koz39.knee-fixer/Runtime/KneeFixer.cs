@@ -7,11 +7,9 @@ namespace KOZ39.KneeFixer
     [AddComponentMenu("KOZ39/Knee Fixer")]
     public class KneeFixer : MonoBehaviour, IEditorOnly
     {
-        private const float DefaultKneeDepth = -0.01f;
-
         public KneeFixerPreset preset;
 
         [Range(-0.02f, 0.02f)]
-        public float kneeDepth = DefaultKneeDepth;
+        public float kneeDepth = -0.01f;
     }
 }

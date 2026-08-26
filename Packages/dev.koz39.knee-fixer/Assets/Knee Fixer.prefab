@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7315874473335825874}
   - component: {fileID: -261848503141075342}
   m_Layer: 0
-  m_Name: KneeFixer
+  m_Name: Knee Fixer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
