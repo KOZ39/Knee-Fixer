@@ -49,6 +49,8 @@ namespace KOZ39.KneeFixer
             ref KneeFixer activeFixer,
             ref int activeDepth)
         {
+            if (current.CompareTag("EditorOnly")) return;
+
             var isNestedAvatar = current != avatarRoot
                 && current.TryGetComponent<VRCAvatarDescriptor>(out _);
 

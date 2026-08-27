@@ -22,19 +22,12 @@ namespace KOZ39.KneeFixer
             float weight)
             where T : VRCConstraintBase
         {
-            var constraint = target.GetComponent<T>();
+            var constraint = target.AddComponent<T>();
 
-            constraint ??= target.AddComponent<T>();
+            constraint.Sources.Add(new VRCConstraintSource(source, weight));
 
-            constraint.Sources.Clear();
-            constraint.Sources.Add(
-                new VRCConstraintSource
-                {
-                    SourceTransform = source,
-                    Weight = weight
-                });
-
-            constraint.IsActive = true;
+            constraint.ApplyConfigurationChanges();
+            constraint.ZeroConstraint();
         }
     }
 }
