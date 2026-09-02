@@ -18,8 +18,8 @@ namespace KOZ39.KneeFixer
 
         private void OnEnable()
         {
-            _presetProperty = serializedObject.FindProperty("preset");
-            _kneeDepthProperty = serializedObject.FindProperty("kneeDepth");
+            _presetProperty = serializedObject.FindProperty(nameof(KneeFixer.preset));
+            _kneeDepthProperty = serializedObject.FindProperty(nameof(KneeFixer.kneeDepth));
 
             RefreshPresets();
         }
@@ -28,28 +28,31 @@ namespace KOZ39.KneeFixer
         {
             var presets = AssetDatabase
                 .FindAssets("t:KneeFixerPreset")
-                .Select(guid =>
-                {
-                    var path = AssetDatabase.GUIDToAssetPath(guid);
-                    var preset = AssetDatabase.LoadAssetAtPath<KneeFixerPreset>(path);
-
-                    if (preset == null)
-                        Debug.LogWarning(
-                            $"Failed to load a Knee Fixer preset from '{path}' (GUID: {guid}).");
-
-                    return preset;
-                })
+                .Select(LoadPreset)
                 .Where(preset => preset != null)
                 .OrderBy(GetDisplayName)
                 .ToArray();
 
-            _presets = new[] { (KneeFixerPreset)null }
-                .Concat(presets)
+            _presets = presets
+                .Prepend((KneeFixerPreset)null)
                 .ToArray();
 
-            _displayNames = new[] { "None" }
-                .Concat(presets.Select(GetDisplayName))
+            _displayNames = presets
+                .Select(GetDisplayName)
+                .Prepend("None")
                 .ToArray();
+        }
+
+        private static KneeFixerPreset LoadPreset(string guid)
+        {
+            var path = AssetDatabase.GUIDToAssetPath(guid);
+            var preset = AssetDatabase.LoadAssetAtPath<KneeFixerPreset>(path);
+
+            if (preset == null)
+                Debug.LogWarning(
+                    $"Failed to load a Knee Fixer preset from '{path}' (GUID: {guid}).");
+
+            return preset;
         }
 
         private static string GetDisplayName(KneeFixerPreset preset) =>
