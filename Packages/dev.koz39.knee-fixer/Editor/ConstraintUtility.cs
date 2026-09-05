@@ -22,7 +22,6 @@ namespace KOZ39.KneeFixer
 
             constraint.Sources.Add(new VRCConstraintSource(source, weight));
 
-            constraint.ApplyConfigurationChanges();
             constraint.ZeroConstraint();
         }
     }
