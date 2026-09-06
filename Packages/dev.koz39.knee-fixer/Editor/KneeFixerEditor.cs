@@ -38,7 +38,9 @@ namespace KOZ39.KneeFixer
             for (var i = 0; i < stream.length; i++)
             {
                 if (stream.GetEventType(i) != ObjectChangeKind.ChangeAssetObjectProperties)
+                {
                     continue;
+                }
 
                 stream.GetChangeAssetObjectPropertiesEvent(i, out var change);
 
@@ -59,14 +61,9 @@ namespace KOZ39.KneeFixer
                 .OrderBy(GetDisplayName)
                 .ToArray();
 
-            _presets = presets
-                .Prepend((KneeFixerPreset)null)
-                .ToArray();
+            _presets = presets.Prepend((KneeFixerPreset)null).ToArray();
 
-            _displayNames = presets
-                .Select(GetDisplayName)
-                .Prepend("None")
-                .ToArray();
+            _displayNames = presets.Select(GetDisplayName).Prepend("None").ToArray();
 
             Repaint();
         }
@@ -77,16 +74,17 @@ namespace KOZ39.KneeFixer
             var preset = AssetDatabase.LoadAssetAtPath<KneeFixerPreset>(path);
 
             if (preset == null)
+            {
                 Debug.LogWarning(
-                    $"Failed to load a Knee Fixer preset from '{path}' (GUID: {guid}).");
+                    $"Failed to load a Knee Fixer preset from '{path}' (GUID: {guid})."
+                );
+            }
 
             return preset;
         }
 
         private static string GetDisplayName(KneeFixerPreset preset) =>
-            string.IsNullOrWhiteSpace(preset.displayName)
-                ? preset.name
-                : preset.displayName;
+            string.IsNullOrWhiteSpace(preset.displayName) ? preset.name : preset.displayName;
 
         public override void OnInspectorGUI()
         {
@@ -108,22 +106,29 @@ namespace KOZ39.KneeFixer
         {
             EditorGUILayout.LabelField(
                 $"Version: {KneeFixerPackageInfo.Version}",
-                EditorStyles.boldLabel);
+                EditorStyles.boldLabel
+            );
             EditorGUILayout.Space();
         }
 
         private bool DrawDuplicateWarnings()
         {
-            var (hasActiveFixer, hasInactiveFixer, duplicateFixers) =
-                GetDuplicateInfo();
+            var (hasActiveFixer, hasInactiveFixer, duplicateFixers) = GetDuplicateInfo();
 
-            if (duplicateFixers.Count == 0) return false;
+            if (duplicateFixers.Count == 0)
+            {
+                return false;
+            }
 
             if (hasActiveFixer)
+            {
                 DrawWarning(GetDuplicateWarningMessage(true), duplicateFixers);
+            }
 
             if (hasInactiveFixer)
+            {
                 DrawWarning(GetDuplicateWarningMessage(false), duplicateFixers);
+            }
 
             EditorGUILayout.Space();
 
@@ -140,22 +145,34 @@ namespace KOZ39.KneeFixer
             {
                 var avatarRoot = KneeFixerUtility.FindAvatarRoot(fixer);
 
-                if (avatarRoot == null) continue;
+                if (avatarRoot == null)
+                {
+                    continue;
+                }
 
                 var (activeFixer, fixers) = KneeFixerUtility.FindActive(avatarRoot);
 
-                if (fixers.Length < 2) continue;
+                if (fixers.Length < 2)
+                {
+                    continue;
+                }
 
                 foreach (var avatarFixer in fixers)
                 {
                     if (!duplicateFixers.Contains(avatarFixer))
+                    {
                         duplicateFixers.Add(avatarFixer);
+                    }
                 }
 
                 if (fixer == activeFixer)
+                {
                     hasActive = true;
+                }
                 else
+                {
                     hasInactive = true;
+                }
             }
 
             return (hasActive, hasInactive, duplicateFixers);
@@ -163,9 +180,7 @@ namespace KOZ39.KneeFixer
 
         private string GetDuplicateWarningMessage(bool isActiveFixer)
         {
-            var subject = targets.Length == 1
-                ? "This component"
-                : "Some selected components";
+            var subject = targets.Length == 1 ? "This component" : "Some selected components";
             var result = isActiveFixer ? "used" : "ignored";
 
             return $"Multiple Knee Fixer components were found. {subject} will be {result}.";
@@ -177,19 +192,16 @@ namespace KOZ39.KneeFixer
             {
                 EditorGUILayout.HelpBox(message, MessageType.Warning);
 
-                if (GUILayout.Button(
-                    "Select",
-                    GUILayout.Width(80f),
-                    GUILayout.ExpandHeight(true)))
+                if (GUILayout.Button("Select", GUILayout.Width(80f), GUILayout.ExpandHeight(true)))
+                {
                     SelectFixers(fixers);
+                }
             }
         }
 
         private static void SelectFixers(List<KneeFixer> fixers)
         {
-            var gameObjects = fixers
-                .Select(fixer => fixer.gameObject)
-                .ToArray();
+            var gameObjects = fixers.Select(fixer => fixer.gameObject).ToArray();
 
             Selection.objects = gameObjects;
             EditorGUIUtility.PingObject(gameObjects[0]);
@@ -202,7 +214,9 @@ namespace KOZ39.KneeFixer
             var presetIndex = Array.IndexOf(_presets, currentPreset);
 
             if (presetIndex < 0)
+            {
                 presetIndex = 0;
+            }
 
             var previousShowMixedValue = EditorGUI.showMixedValue;
             EditorGUI.showMixedValue = hasMixedPresets;
@@ -213,45 +227,54 @@ namespace KOZ39.KneeFixer
             var changed = EditorGUI.EndChangeCheck();
             EditorGUI.showMixedValue = previousShowMixedValue;
 
-            if (!changed) return;
+            if (!changed)
+            {
+                return;
+            }
 
             var preset = _presets[presetIndex];
 
             _presetProperty.objectReferenceValue = preset;
 
             if (preset != null)
+            {
                 _kneeDepthProperty.floatValue = preset.kneeDepth;
+            }
         }
 
         private void DrawKneeDepth()
         {
             var hasMixedPresets = _presetProperty.hasMultipleDifferentValues;
             var currentPreset = (KneeFixerPreset)_presetProperty.objectReferenceValue;
-            var kneeDepth = currentPreset != null
-                ? currentPreset.kneeDepth
-                : _kneeDepthProperty.floatValue;
+            var kneeDepth =
+                currentPreset != null ? currentPreset.kneeDepth : _kneeDepthProperty.floatValue;
 
             var hasMixedKneeDepths = hasMixedPresets
-                ? targets.Cast<KneeFixer>().Any(
-                    fixer => !Mathf.Approximately(fixer.EffectiveKneeDepth, kneeDepth))
+                ? targets
+                    .Cast<KneeFixer>()
+                    .Any(fixer => !Mathf.Approximately(fixer.EffectiveKneeDepth, kneeDepth))
                 : currentPreset == null && _kneeDepthProperty.hasMultipleDifferentValues;
 
             var previousShowMixedValue = EditorGUI.showMixedValue;
             EditorGUI.showMixedValue = hasMixedKneeDepths;
             EditorGUI.BeginChangeCheck();
 
-            var newKneeDepth = EditorGUILayout.Slider(
-                "Knee Depth", kneeDepth, -0.02f, 0.02f);
+            var newKneeDepth = EditorGUILayout.Slider("Knee Depth", kneeDepth, -0.02f, 0.02f);
 
             var changed = EditorGUI.EndChangeCheck();
             EditorGUI.showMixedValue = previousShowMixedValue;
 
-            if (!changed) return;
+            if (!changed)
+            {
+                return;
+            }
 
             newKneeDepth = Mathf.Round(newKneeDepth * 1000f) / 1000f;
 
             if (!hasMixedKneeDepths && Mathf.Approximately(newKneeDepth, kneeDepth))
+            {
                 return;
+            }
 
             _kneeDepthProperty.floatValue = newKneeDepth;
             _presetProperty.objectReferenceValue = null;

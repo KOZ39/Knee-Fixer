@@ -13,14 +13,16 @@ namespace KOZ39.KneeFixer
                 HumanBodyBones.LeftUpperLeg,
                 HumanBodyBones.LeftLowerLeg,
                 "L",
-                kneeDepth);
+                kneeDepth
+            );
 
             BuildSide(
                 animator,
                 HumanBodyBones.RightUpperLeg,
                 HumanBodyBones.RightLowerLeg,
                 "R",
-                kneeDepth);
+                kneeDepth
+            );
         }
 
         private static void BuildSide(
@@ -28,12 +30,16 @@ namespace KOZ39.KneeFixer
             HumanBodyBones upperBone,
             HumanBodyBones lowerBone,
             string side,
-            float kneeDepth)
+            float kneeDepth
+        )
         {
             var upper = animator.GetBoneTransform(upperBone);
             var lower = animator.GetBoneTransform(lowerBone);
 
-            if (upper == null || lower == null) return;
+            if (upper == null || lower == null)
+            {
+                return;
+            }
 
             var knee = CreateKnee(upper, lower, side, kneeDepth, animator.transform);
             var target = CreateTarget(lower, knee);
@@ -46,7 +52,8 @@ namespace KOZ39.KneeFixer
             Transform lower,
             string side,
             float kneeDepth,
-            Transform avatarRoot)
+            Transform avatarRoot
+        )
         {
             var knee = new GameObject($"Knee.{side}");
 
@@ -61,7 +68,8 @@ namespace KOZ39.KneeFixer
         private static Vector3 CalculateKneePosition(
             Transform avatarRoot,
             Vector3 worldPosition,
-            float localDepth)
+            float localDepth
+        )
         {
             var localPosition = avatarRoot.InverseTransformPoint(worldPosition);
             localPosition.z = localDepth;
@@ -79,10 +87,7 @@ namespace KOZ39.KneeFixer
             return target;
         }
 
-        private static void SetupConstraints(
-            GameObject knee,
-            Transform lower,
-            GameObject target)
+        private static void SetupConstraints(GameObject knee, Transform lower, GameObject target)
         {
             ConstraintUtility.SetupRotationConstraint(knee, lower);
             ConstraintUtility.SetupPositionConstraint(lower.gameObject, target.transform);

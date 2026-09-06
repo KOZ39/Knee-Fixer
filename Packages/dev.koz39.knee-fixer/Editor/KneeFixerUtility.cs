@@ -13,7 +13,10 @@ namespace KOZ39.KneeFixer
 
             while (current != null)
             {
-                if (current.TryGetComponent<VRCAvatarDescriptor>(out _)) return current.gameObject;
+                if (current.TryGetComponent<VRCAvatarDescriptor>(out _))
+                {
+                    return current.gameObject;
+                }
 
                 current = current.parent;
             }
@@ -21,10 +24,12 @@ namespace KOZ39.KneeFixer
             return null;
         }
 
-        public static (KneeFixer active, KneeFixer[] fixers) FindActive(
-            GameObject avatarRoot)
+        public static (KneeFixer active, KneeFixer[] fixers) FindActive(GameObject avatarRoot)
         {
-            if (avatarRoot == null) return (null, Array.Empty<KneeFixer>());
+            if (avatarRoot == null)
+            {
+                return (null, Array.Empty<KneeFixer>());
+            }
 
             var foundFixers = new List<KneeFixer>();
             KneeFixer activeFixer = null;
@@ -36,7 +41,8 @@ namespace KOZ39.KneeFixer
                 0,
                 foundFixers,
                 ref activeFixer,
-                ref activeDepth);
+                ref activeDepth
+            );
 
             return (activeFixer, foundFixers.ToArray());
         }
@@ -47,14 +53,21 @@ namespace KOZ39.KneeFixer
             int depth,
             List<KneeFixer> fixers,
             ref KneeFixer activeFixer,
-            ref int activeDepth)
+            ref int activeDepth
+        )
         {
-            if (current.CompareTag("EditorOnly")) return;
+            if (current.CompareTag("EditorOnly"))
+            {
+                return;
+            }
 
-            var isNestedAvatar = current != avatarRoot
-                && current.TryGetComponent<VRCAvatarDescriptor>(out _);
+            var isNestedAvatar =
+                current != avatarRoot && current.TryGetComponent<VRCAvatarDescriptor>(out _);
 
-            if (isNestedAvatar) return;
+            if (isNestedAvatar)
+            {
+                return;
+            }
 
             if (current.TryGetComponent<KneeFixer>(out var currentFixer))
             {
@@ -75,7 +88,8 @@ namespace KOZ39.KneeFixer
                     depth + 1,
                     fixers,
                     ref activeFixer,
-                    ref activeDepth);
+                    ref activeDepth
+                );
             }
         }
     }

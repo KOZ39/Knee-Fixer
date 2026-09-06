@@ -12,23 +12,31 @@ namespace KOZ39.KneeFixer
         private const string GameObjectMenuPath = "GameObject/Knee Fixer/Setup";
 
         [MenuItem(GameObjectMenuPath, true)]
-        private static bool ValidateApplyToAvatars() =>
-            GetTargetAvatars().Length > 0;
+        private static bool ValidateApplyToAvatars() => GetTargetAvatars().Length > 0;
 
         [MenuItem(GameObjectMenuPath)]
         private static void ApplyToAvatars(MenuCommand command)
         {
             var ctx = command.context as GameObject;
 
-            if (ctx != null && ctx != Selection.activeGameObject) return;
+            if (ctx != null && ctx != Selection.activeGameObject)
+            {
+                return;
+            }
 
             var targets = GetTargetAvatars(ctx);
 
-            if (targets.Length == 0) return;
+            if (targets.Length == 0)
+            {
+                return;
+            }
 
             var prefab = LoadPrefab();
 
-            if (prefab == null) return;
+            if (prefab == null)
+            {
+                return;
+            }
 
             Undo.IncrementCurrentGroup();
             var undoGroup = Undo.GetCurrentGroup();
@@ -40,7 +48,10 @@ namespace KOZ39.KneeFixer
             {
                 var instance = SetupAvatar(target, prefab);
 
-                if (instance == null) continue;
+                if (instance == null)
+                {
+                    continue;
+                }
 
                 instances.Add(instance);
             }
@@ -51,8 +62,8 @@ namespace KOZ39.KneeFixer
         }
 
         private static GameObject[] GetTargetAvatars(GameObject context = null) =>
-            Selection.gameObjects
-                .Append(context)
+            Selection
+                .gameObjects.Append(context)
                 .Where(target => target != null)
                 .Where(target => target.TryGetComponent<VRCAvatarDescriptor>(out _))
                 .Distinct()
@@ -72,7 +83,9 @@ namespace KOZ39.KneeFixer
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
 
             if (prefab == null)
+            {
                 Debug.LogError($"Failed to load the {displayName} prefab.");
+            }
 
             return prefab;
         }
@@ -86,7 +99,8 @@ namespace KOZ39.KneeFixer
             {
                 Debug.LogWarning(
                     $"Skipped avatar '{target.name}': {displayName} already exists.",
-                    target);
+                    target
+                );
                 return null;
             }
 
@@ -96,7 +110,8 @@ namespace KOZ39.KneeFixer
             {
                 Debug.LogError(
                     $"Failed to set up {displayName} on avatar '{target.name}'.",
-                    target);
+                    target
+                );
                 return null;
             }
 
@@ -107,12 +122,17 @@ namespace KOZ39.KneeFixer
 
         private static void SelectInstances(List<GameObject> instances)
         {
-            if (instances.Count == 0) return;
+            if (instances.Count == 0)
+            {
+                return;
+            }
 
             Selection.objects = instances.ToArray();
 
             if (instances.Count == 1)
+            {
                 EditorGUIUtility.PingObject(instances[0]);
+            }
         }
     }
 }

@@ -9,11 +9,17 @@ namespace KOZ39.KneeFixer
         {
             var animator = ctx.AvatarRootObject.GetComponent<Animator>();
 
-            if (animator == null || !animator.isHuman) return;
+            if (animator == null || !animator.isHuman)
+            {
+                return;
+            }
 
             var (activeFixer, fixers) = KneeFixerUtility.FindActive(ctx.AvatarRootObject);
 
-            if (activeFixer == null) return;
+            if (activeFixer == null)
+            {
+                return;
+            }
 
             KneeFixerBuilder.Build(animator, activeFixer);
 

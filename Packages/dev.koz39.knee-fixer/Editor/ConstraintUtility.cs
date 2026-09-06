@@ -12,10 +12,7 @@ namespace KOZ39.KneeFixer
         public static void SetupPositionConstraint(GameObject target, Transform source) =>
             SetupConstraint<VRCPositionConstraint>(target, source, 1f);
 
-        private static void SetupConstraint<T>(
-            GameObject target,
-            Transform source,
-            float weight)
+        private static void SetupConstraint<T>(GameObject target, Transform source, float weight)
             where T : VRCConstraintBase
         {
             var constraint = target.AddComponent<T>();
