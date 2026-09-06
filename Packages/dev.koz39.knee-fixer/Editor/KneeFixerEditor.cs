@@ -22,6 +22,32 @@ namespace KOZ39.KneeFixer
             _kneeDepthProperty = serializedObject.FindProperty(nameof(KneeFixer.kneeDepth));
 
             RefreshPresets();
+
+            EditorApplication.projectChanged += RefreshPresets;
+            ObjectChangeEvents.changesPublished += OnObjectChangesPublished;
+        }
+
+        private void OnDisable()
+        {
+            EditorApplication.projectChanged -= RefreshPresets;
+            ObjectChangeEvents.changesPublished -= OnObjectChangesPublished;
+        }
+
+        private void OnObjectChangesPublished(ref ObjectChangeEventStream stream)
+        {
+            for (var i = 0; i < stream.length; i++)
+            {
+                if (stream.GetEventType(i) != ObjectChangeKind.ChangeAssetObjectProperties)
+                    continue;
+
+                stream.GetChangeAssetObjectPropertiesEvent(i, out var change);
+
+                if (EditorUtility.InstanceIDToObject(change.instanceId) is KneeFixerPreset)
+                {
+                    RefreshPresets();
+                    return;
+                }
+            }
         }
 
         private void RefreshPresets()
@@ -41,6 +67,8 @@ namespace KOZ39.KneeFixer
                 .Select(GetDisplayName)
                 .Prepend("None")
                 .ToArray();
+
+            Repaint();
         }
 
         private static KneeFixerPreset LoadPreset(string guid)
@@ -220,9 +248,12 @@ namespace KOZ39.KneeFixer
 
             if (!changed) return;
 
-            _kneeDepthProperty.floatValue =
-                Mathf.Round(newKneeDepth * 1000f) / 1000f;
+            newKneeDepth = Mathf.Round(newKneeDepth * 1000f) / 1000f;
 
+            if (!hasMixedKneeDepths && Mathf.Approximately(newKneeDepth, kneeDepth))
+                return;
+
+            _kneeDepthProperty.floatValue = newKneeDepth;
             _presetProperty.objectReferenceValue = null;
         }
     }
