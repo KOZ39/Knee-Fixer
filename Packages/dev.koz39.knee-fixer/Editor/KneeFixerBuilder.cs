@@ -6,19 +6,21 @@ namespace KOZ39.KneeFixer
     {
         public static void Build(Animator animator, KneeFixer fixer)
         {
+            var kneeDepth = fixer.EffectiveKneeDepth;
+
             BuildSide(
                 animator,
                 HumanBodyBones.LeftUpperLeg,
                 HumanBodyBones.LeftLowerLeg,
                 "L",
-                fixer.kneeDepth);
+                kneeDepth);
 
             BuildSide(
                 animator,
                 HumanBodyBones.RightUpperLeg,
                 HumanBodyBones.RightLowerLeg,
                 "R",
-                fixer.kneeDepth);
+                kneeDepth);
         }
 
         private static void BuildSide(

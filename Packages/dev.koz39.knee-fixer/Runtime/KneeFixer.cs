@@ -11,5 +11,8 @@ namespace KOZ39.KneeFixer
 
         [Range(-0.02f, 0.02f)]
         public float kneeDepth = -0.01f;
+
+        public float EffectiveKneeDepth =>
+            preset != null ? preset.kneeDepth : kneeDepth;
     }
 }

@@ -199,23 +199,31 @@ namespace KOZ39.KneeFixer
         {
             var hasMixedPresets = _presetProperty.hasMultipleDifferentValues;
             var currentPreset = (KneeFixerPreset)_presetProperty.objectReferenceValue;
+            var kneeDepth = currentPreset != null
+                ? currentPreset.kneeDepth
+                : _kneeDepthProperty.floatValue;
 
+            var hasMixedKneeDepths = hasMixedPresets
+                ? targets.Cast<KneeFixer>().Any(
+                    fixer => !Mathf.Approximately(fixer.EffectiveKneeDepth, kneeDepth))
+                : currentPreset == null && _kneeDepthProperty.hasMultipleDifferentValues;
+
+            var previousShowMixedValue = EditorGUI.showMixedValue;
+            EditorGUI.showMixedValue = hasMixedKneeDepths;
             EditorGUI.BeginChangeCheck();
 
-            EditorGUILayout.PropertyField(_kneeDepthProperty);
+            var newKneeDepth = EditorGUILayout.Slider(
+                "Knee Depth", kneeDepth, -0.02f, 0.02f);
 
-            if (!EditorGUI.EndChangeCheck()) return;
+            var changed = EditorGUI.EndChangeCheck();
+            EditorGUI.showMixedValue = previousShowMixedValue;
+
+            if (!changed) return;
 
             _kneeDepthProperty.floatValue =
-                Mathf.Round(_kneeDepthProperty.floatValue * 1000f) / 1000f;
+                Mathf.Round(newKneeDepth * 1000f) / 1000f;
 
-            var differsFromCurrentPreset = currentPreset != null
-                && !Mathf.Approximately(
-                    _kneeDepthProperty.floatValue,
-                    currentPreset.kneeDepth);
-
-            if (hasMixedPresets || differsFromCurrentPreset)
-                _presetProperty.objectReferenceValue = null;
+            _presetProperty.objectReferenceValue = null;
         }
     }
 }
