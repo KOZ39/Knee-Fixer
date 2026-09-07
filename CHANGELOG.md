@@ -4,17 +4,16 @@
 
 ### Fixed
 
-- VRChat Avatars SDK 3.10.0 미만 버전에서 컴파일 실패 문제
-- 프리셋의 무릎 깊이 변경 사항이 인스펙터와 빌드에 반영되지 않는 문제
+- VRChat Avatars SDK 3.10.0 미만 버전에서 컴파일 오류
+- 프리셋에서 변경한 무릎 깊이가 인스펙터와 빌드에 반영되지 않는 문제
 - 프리셋 추가·삭제 및 표시 이름 변경 시 인스펙터 목록 갱신 누락
 
 ## v2.1.2 (2026-08-27)
 
 ### Changed
 
-- Manuka 프리셋 표시 이름
+- 프리셋 표시 이름
     - `Manuka (マヌカ)` → `Manuka (マヌカ) - Style A`
-- Manuka v2 프리셋 표시 이름
     - `Manuka (マヌカ) v2` → `Manuka (マヌカ) - Style B`
 - 라이선스
     - `MIT` → `MIT-0`
@@ -37,7 +36,8 @@
 
 ### Added
 
-- Manuka v2 프리셋
+- 프리셋
+    - Manuka v2
 - 인스펙터에서 여러 Knee Fixer 동시 설정
 - Knee Fixer 중복 경고 및 해당 오브젝트 선택 버튼
 
@@ -58,7 +58,8 @@
 
 ### Added
 
-- Milfy 프리셋
+- 프리셋
+    - Milfy
 
 ### Changed
 
@@ -94,14 +95,16 @@
 
 ### Added
 
-- Ichigo 프리셋
-- Riru 프리셋
+- 프리셋
+    - Ichigo
+    - Riru
 
 ## v1.3.3 (2026-03-07)
 
 ### Added
 
-- Manuka 프리셋
+- 프리셋
+    - Manuka
 
 ### Changed
 
@@ -121,7 +124,7 @@
 
 ### Fixed
 
-- VRChat Worlds SDK의 컴파일 실패 문제
+- VRChat Worlds SDK에서 컴파일 오류
 
 ## v1.3.1 (2026-01-31)
 
@@ -143,13 +146,15 @@
 
 ### Added
 
-- Plum 프리셋 프리팹
+- 프리셋 프리팹
+    - Plum
 
 ## v1.1.0 (2025-12-26)
 
 ### Added
 
-- Rinasciita 프리셋 프리팹
+- 프리셋 프리팹
+    - Rinasciita
 
 ## v1.0.1 (2025-12-25)
 
