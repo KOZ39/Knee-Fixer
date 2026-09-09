@@ -14,7 +14,7 @@ namespace KOZ39.KneeFixer
         private SerializedProperty _kneeDepthProperty;
 
         private KneeFixerPreset[] _presets = Array.Empty<KneeFixerPreset>();
-        private string[] _displayNames = Array.Empty<string>();
+        private GUIContent[] _displayNames = Array.Empty<GUIContent>();
 
         private void OnEnable()
         {
@@ -63,7 +63,11 @@ namespace KOZ39.KneeFixer
 
             _presets = presets.Prepend((KneeFixerPreset)null).ToArray();
 
-            _displayNames = presets.Select(GetDisplayName).Prepend("None").ToArray();
+            _displayNames = presets
+                .Select(GetDisplayName)
+                .Prepend("None")
+                .Select(displayName => new GUIContent(displayName))
+                .ToArray();
 
             Repaint();
         }
@@ -209,75 +213,83 @@ namespace KOZ39.KneeFixer
 
         private void DrawPresetPopup()
         {
-            var hasMixedPresets = _presetProperty.hasMultipleDifferentValues;
-            var currentPreset = (KneeFixerPreset)_presetProperty.objectReferenceValue;
-            var presetIndex = Array.IndexOf(_presets, currentPreset);
+            var position = EditorGUILayout.GetControlRect();
 
-            if (presetIndex < 0)
+            using (new EditorGUI.PropertyScope(position, GUIContent.none, _kneeDepthProperty))
+            using (var scope = new EditorGUI.PropertyScope(position, null, _presetProperty))
             {
-                presetIndex = 0;
-            }
+                var currentPreset = (KneeFixerPreset)_presetProperty.objectReferenceValue;
+                var presetIndex = Array.IndexOf(_presets, currentPreset);
 
-            var previousShowMixedValue = EditorGUI.showMixedValue;
-            EditorGUI.showMixedValue = hasMixedPresets;
-            EditorGUI.BeginChangeCheck();
+                if (presetIndex < 0)
+                {
+                    presetIndex = 0;
+                }
 
-            presetIndex = EditorGUILayout.Popup("Preset", presetIndex, _displayNames);
+                EditorGUI.BeginChangeCheck();
 
-            var changed = EditorGUI.EndChangeCheck();
-            EditorGUI.showMixedValue = previousShowMixedValue;
+                presetIndex = EditorGUI.Popup(position, scope.content, presetIndex, _displayNames);
 
-            if (!changed)
-            {
-                return;
-            }
+                if (!EditorGUI.EndChangeCheck())
+                {
+                    return;
+                }
 
-            var preset = _presets[presetIndex];
+                var preset = _presets[presetIndex];
 
-            _presetProperty.objectReferenceValue = preset;
+                _presetProperty.objectReferenceValue = preset;
 
-            if (preset != null)
-            {
-                _kneeDepthProperty.floatValue = preset.kneeDepth;
+                if (preset != null)
+                {
+                    _kneeDepthProperty.floatValue = preset.kneeDepth;
+                }
             }
         }
 
         private void DrawKneeDepth()
         {
-            var hasMixedPresets = _presetProperty.hasMultipleDifferentValues;
-            var currentPreset = (KneeFixerPreset)_presetProperty.objectReferenceValue;
-            var kneeDepth =
-                currentPreset != null ? currentPreset.kneeDepth : _kneeDepthProperty.floatValue;
+            var position = EditorGUILayout.GetControlRect();
 
-            var hasMixedKneeDepths = hasMixedPresets
-                ? targets
-                    .Cast<KneeFixer>()
-                    .Any(fixer => !Mathf.Approximately(fixer.EffectiveKneeDepth, kneeDepth))
-                : currentPreset == null && _kneeDepthProperty.hasMultipleDifferentValues;
-
-            var previousShowMixedValue = EditorGUI.showMixedValue;
-            EditorGUI.showMixedValue = hasMixedKneeDepths;
-            EditorGUI.BeginChangeCheck();
-
-            var newKneeDepth = EditorGUILayout.Slider("Knee Depth", kneeDepth, -0.02f, 0.02f);
-
-            var changed = EditorGUI.EndChangeCheck();
-            EditorGUI.showMixedValue = previousShowMixedValue;
-
-            if (!changed)
+            using (new EditorGUI.PropertyScope(position, GUIContent.none, _presetProperty))
+            using (var scope = new EditorGUI.PropertyScope(position, null, _kneeDepthProperty))
             {
-                return;
+                var hasMixedPresets = _presetProperty.hasMultipleDifferentValues;
+                var currentPreset = (KneeFixerPreset)_presetProperty.objectReferenceValue;
+                var kneeDepth =
+                    currentPreset != null ? currentPreset.kneeDepth : _kneeDepthProperty.floatValue;
+
+                var hasMixedKneeDepths = hasMixedPresets
+                    ? targets
+                        .Cast<KneeFixer>()
+                        .Any(fixer => !Mathf.Approximately(fixer.EffectiveKneeDepth, kneeDepth))
+                    : currentPreset == null && _kneeDepthProperty.hasMultipleDifferentValues;
+
+                EditorGUI.showMixedValue = hasMixedKneeDepths;
+                EditorGUI.BeginChangeCheck();
+
+                var newKneeDepth = EditorGUI.Slider(
+                    position,
+                    scope.content,
+                    kneeDepth,
+                    -0.02f,
+                    0.02f
+                );
+
+                if (!EditorGUI.EndChangeCheck())
+                {
+                    return;
+                }
+
+                newKneeDepth = Mathf.Round(newKneeDepth * 1000f) / 1000f;
+
+                if (!hasMixedKneeDepths && Mathf.Approximately(newKneeDepth, kneeDepth))
+                {
+                    return;
+                }
+
+                _kneeDepthProperty.floatValue = newKneeDepth;
+                _presetProperty.objectReferenceValue = null;
             }
-
-            newKneeDepth = Mathf.Round(newKneeDepth * 1000f) / 1000f;
-
-            if (!hasMixedKneeDepths && Mathf.Approximately(newKneeDepth, kneeDepth))
-            {
-                return;
-            }
-
-            _kneeDepthProperty.floatValue = newKneeDepth;
-            _presetProperty.objectReferenceValue = null;
         }
     }
 }
