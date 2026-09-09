@@ -14,14 +14,14 @@ namespace KOZ39.KneeFixer
                 return;
             }
 
-            var (activeFixer, fixers) = KneeFixerUtility.FindActive(ctx.AvatarRootObject);
+            var (primaryFixer, fixers) = KneeFixerUtility.FindPrimary(ctx.AvatarRootObject);
 
-            if (activeFixer == null)
+            if (primaryFixer == null)
             {
                 return;
             }
 
-            KneeFixerBuilder.Build(animator, activeFixer);
+            KneeFixerBuilder.Build(animator, primaryFixer);
 
             foreach (var fixer in fixers)
             {

@@ -91,9 +91,9 @@ namespace KOZ39.KneeFixer
             serializedObject.Update();
 
             DrawInfo();
-            var hasInactiveFixer = DrawDuplicateWarnings();
+            var hasIgnoredFixer = DrawDuplicateWarnings();
 
-            using (new EditorGUI.DisabledScope(hasInactiveFixer))
+            using (new EditorGUI.DisabledScope(hasIgnoredFixer))
             {
                 DrawPresetPopup();
                 DrawKneeDepth();
@@ -113,32 +113,32 @@ namespace KOZ39.KneeFixer
 
         private bool DrawDuplicateWarnings()
         {
-            var (hasActiveFixer, hasInactiveFixer, duplicateFixers) = GetDuplicateInfo();
+            var (hasPrimaryFixer, hasIgnoredFixer, duplicateFixers) = GetDuplicateInfo();
 
             if (duplicateFixers.Count == 0)
             {
                 return false;
             }
 
-            if (hasActiveFixer)
+            if (hasPrimaryFixer)
             {
                 DrawWarning(GetDuplicateWarningMessage(true), duplicateFixers);
             }
 
-            if (hasInactiveFixer)
+            if (hasIgnoredFixer)
             {
                 DrawWarning(GetDuplicateWarningMessage(false), duplicateFixers);
             }
 
             EditorGUILayout.Space();
 
-            return hasInactiveFixer;
+            return hasIgnoredFixer;
         }
 
-        private (bool hasActive, bool hasInactive, List<KneeFixer> fixers) GetDuplicateInfo()
+        private (bool hasPrimary, bool hasIgnored, List<KneeFixer> fixers) GetDuplicateInfo()
         {
-            var hasActive = false;
-            var hasInactive = false;
+            var hasPrimary = false;
+            var hasIgnored = false;
             var duplicateFixers = new List<KneeFixer>();
 
             foreach (var fixer in targets.Cast<KneeFixer>())
@@ -150,7 +150,7 @@ namespace KOZ39.KneeFixer
                     continue;
                 }
 
-                var (activeFixer, fixers) = KneeFixerUtility.FindActive(avatarRoot);
+                var (primaryFixer, fixers) = KneeFixerUtility.FindPrimary(avatarRoot);
 
                 if (fixers.Length < 2)
                 {
@@ -165,23 +165,23 @@ namespace KOZ39.KneeFixer
                     }
                 }
 
-                if (fixer == activeFixer)
+                if (fixer == primaryFixer)
                 {
-                    hasActive = true;
+                    hasPrimary = true;
                 }
                 else
                 {
-                    hasInactive = true;
+                    hasIgnored = true;
                 }
             }
 
-            return (hasActive, hasInactive, duplicateFixers);
+            return (hasPrimary, hasIgnored, duplicateFixers);
         }
 
-        private string GetDuplicateWarningMessage(bool isActiveFixer)
+        private string GetDuplicateWarningMessage(bool isPrimaryFixer)
         {
             var subject = targets.Length == 1 ? "This component" : "Some selected components";
-            var result = isActiveFixer ? "used" : "ignored";
+            var result = isPrimaryFixer ? "used" : "ignored";
 
             return $"Multiple Knee Fixer components were found. {subject} will be {result}.";
         }

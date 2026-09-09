@@ -24,7 +24,7 @@ namespace KOZ39.KneeFixer
             return null;
         }
 
-        public static (KneeFixer active, KneeFixer[] fixers) FindActive(GameObject avatarRoot)
+        public static (KneeFixer primary, KneeFixer[] fixers) FindPrimary(GameObject avatarRoot)
         {
             if (avatarRoot == null)
             {
@@ -32,28 +32,28 @@ namespace KOZ39.KneeFixer
             }
 
             var foundFixers = new List<KneeFixer>();
-            KneeFixer activeFixer = null;
-            var activeDepth = int.MaxValue;
+            KneeFixer primaryFixer = null;
+            var primaryDepth = int.MaxValue;
 
-            FindActive(
+            FindPrimary(
                 avatarRoot.transform,
                 avatarRoot.transform,
                 0,
                 foundFixers,
-                ref activeFixer,
-                ref activeDepth
+                ref primaryFixer,
+                ref primaryDepth
             );
 
-            return (activeFixer, foundFixers.ToArray());
+            return (primaryFixer, foundFixers.ToArray());
         }
 
-        private static void FindActive(
+        private static void FindPrimary(
             Transform current,
             Transform avatarRoot,
             int depth,
             List<KneeFixer> fixers,
-            ref KneeFixer activeFixer,
-            ref int activeDepth
+            ref KneeFixer primaryFixer,
+            ref int primaryDepth
         )
         {
             if (current.CompareTag("EditorOnly"))
@@ -73,22 +73,22 @@ namespace KOZ39.KneeFixer
             {
                 fixers.Add(currentFixer);
 
-                if (depth < activeDepth)
+                if (depth < primaryDepth)
                 {
-                    activeFixer = currentFixer;
-                    activeDepth = depth;
+                    primaryFixer = currentFixer;
+                    primaryDepth = depth;
                 }
             }
 
             for (var i = 0; i < current.childCount; i++)
             {
-                FindActive(
+                FindPrimary(
                     current.GetChild(i),
                     avatarRoot,
                     depth + 1,
                     fixers,
-                    ref activeFixer,
-                    ref activeDepth
+                    ref primaryFixer,
+                    ref primaryDepth
                 );
             }
         }

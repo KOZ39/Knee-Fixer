@@ -93,9 +93,9 @@ namespace KOZ39.KneeFixer
         private static GameObject SetupAvatar(GameObject target, GameObject prefab)
         {
             var displayName = KneeFixerPackageInfo.DisplayName;
-            var (activeFixer, _) = KneeFixerUtility.FindActive(target);
+            var (primaryFixer, _) = KneeFixerUtility.FindPrimary(target);
 
-            if (activeFixer != null)
+            if (primaryFixer != null)
             {
                 Debug.LogWarning(
                     $"Skipped avatar '{target.name}': {displayName} already exists.",
