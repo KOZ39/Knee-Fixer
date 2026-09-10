@@ -237,13 +237,26 @@ namespace KOZ39.KneeFixer
 
                 var preset = _presets[presetIndex];
 
-                _presetProperty.objectReferenceValue = preset;
-
-                if (preset != null)
+                if (preset == null)
                 {
-                    _kneeDepthProperty.floatValue = preset.kneeDepth;
+                    PreserveKneeDepths();
                 }
+
+                _presetProperty.objectReferenceValue = preset;
             }
+        }
+
+        private void PreserveKneeDepths()
+        {
+            foreach (var fixer in targets.Cast<KneeFixer>())
+            {
+                using var serializedFixer = new SerializedObject(fixer);
+                serializedFixer.FindProperty(nameof(KneeFixer.kneeDepth)).floatValue =
+                    fixer.EffectiveKneeDepth;
+                serializedFixer.ApplyModifiedProperties();
+            }
+
+            serializedObject.Update();
         }
 
         private void DrawKneeDepth()
