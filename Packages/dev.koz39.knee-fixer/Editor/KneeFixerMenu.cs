@@ -65,6 +65,7 @@ namespace KOZ39.KneeFixer
             Selection
                 .gameObjects.Append(context)
                 .Where(target => target != null)
+                .Where(target => !PrefabUtility.IsPartOfPrefabAsset(target))
                 .Where(target => target.TryGetComponent<VRCAvatarDescriptor>(out _))
                 .Distinct()
                 .ToArray();
