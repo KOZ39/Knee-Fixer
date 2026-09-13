@@ -1,6 +1,7 @@
 {
   "name": "dev.koz39.knee-fixer",
   "displayName": "Knee Fixer",
+  "description": "Non-destructive knee correction tool for VRChat avatars.",
   "version": "2.1.4",
   "unity": "2022.3",
   "vpmDependencies": {
