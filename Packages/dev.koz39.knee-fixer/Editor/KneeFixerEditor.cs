@@ -219,12 +219,7 @@ namespace KOZ39.KneeFixer
             using (var scope = new EditorGUI.PropertyScope(position, null, _presetProperty))
             {
                 var currentPreset = (KneeFixerPreset)_presetProperty.objectReferenceValue;
-                var presetIndex = Array.IndexOf(_presets, currentPreset);
-
-                if (presetIndex < 0)
-                {
-                    presetIndex = 0;
-                }
+                var presetIndex = Mathf.Max(0, Array.IndexOf(_presets, currentPreset));
 
                 EditorGUI.BeginChangeCheck();
 

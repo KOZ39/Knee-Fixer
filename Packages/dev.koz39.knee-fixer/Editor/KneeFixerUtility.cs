@@ -9,19 +9,9 @@ namespace KOZ39.KneeFixer
     {
         public static GameObject FindAvatarRoot(KneeFixer fixer)
         {
-            var current = fixer.transform;
+            var descriptor = fixer.GetComponentInParent<VRCAvatarDescriptor>(true);
 
-            while (current != null)
-            {
-                if (current.TryGetComponent<VRCAvatarDescriptor>(out _))
-                {
-                    return current.gameObject;
-                }
-
-                current = current.parent;
-            }
-
-            return null;
+            return descriptor != null ? descriptor.gameObject : null;
         }
 
         public static (KneeFixer primary, KneeFixer[] fixers) FindPrimary(GameObject avatarRoot)
