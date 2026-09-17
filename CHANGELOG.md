@@ -26,10 +26,10 @@
 ### Changed
 
 - 프리셋 표시 이름
-    - `Manuka (マヌカ)` → `Manuka (マヌカ) - Style A`
-    - `Manuka (マヌカ) v2` → `Manuka (マヌカ) - Style B`
+    - Manuka (マヌカ) → Manuka (マヌカ) - Style A
+    - Manuka (マヌカ) v2 → Manuka (マヌカ) - Style B
 - 라이선스
-    - `MIT` → `MIT-0`
+    - MIT → MIT-0
 
 ### Removed
 
@@ -37,7 +37,7 @@
 
 ### Fixed
 
-- `EditorOnly` 태그가 지정된 오브젝트 및 하위 오브젝트의 Knee Fixer까지 포함하는 중복 판정 문제
+- EditorOnly 태그가 지정된 오브젝트 및 하위 오브젝트의 Knee Fixer까지 포함하는 중복 판정 문제
 
 ## v2.1.1 (2026-08-25)
 
@@ -102,7 +102,7 @@
 
 - 일부 파일 이름 및 경로
 - 인스펙터의 본 참조 항목 제목
-    - `Debug` → `Bone References`
+    - Debug → Bone References
 
 ## v1.3.4 (2026-03-18)
 
@@ -122,7 +122,7 @@
 ### Changed
 
 - 수동 설정 프리셋 이름
-    - `Custom` → `None`
+    - Custom → None
 - 아바타 프리셋 이름에 일본어 이름을 함께 표시
 
 ### Removed
