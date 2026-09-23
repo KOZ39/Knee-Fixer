@@ -14,7 +14,6 @@ namespace KOZ39.KneeFixer
         private SerializedProperty _kneeDepthProperty;
 
         private KneeFixerPreset[] _presets = Array.Empty<KneeFixerPreset>();
-        private GUIContent[] _displayNames = Array.Empty<GUIContent>();
 
         private void OnEnable()
         {
@@ -54,19 +53,12 @@ namespace KOZ39.KneeFixer
 
         private void RefreshPresets()
         {
-            var presets = AssetDatabase
+            _presets = AssetDatabase
                 .FindAssets("t:KneeFixerPreset")
                 .Select(LoadPreset)
                 .Where(preset => preset != null)
                 .OrderBy(GetDisplayName)
-                .ToArray();
-
-            _presets = presets.Prepend((KneeFixerPreset)null).ToArray();
-
-            _displayNames = presets
-                .Select(GetDisplayName)
-                .Prepend("None")
-                .Select(displayName => new GUIContent(displayName))
+                .Prepend((KneeFixerPreset)null)
                 .ToArray();
 
             Repaint();
@@ -87,8 +79,15 @@ namespace KOZ39.KneeFixer
             return preset;
         }
 
-        private static string GetDisplayName(KneeFixerPreset preset) =>
-            string.IsNullOrWhiteSpace(preset.displayName) ? preset.name : preset.displayName;
+        private static string GetDisplayName(KneeFixerPreset preset)
+        {
+            if (preset == null)
+            {
+                return "None";
+            }
+
+            return string.IsNullOrWhiteSpace(preset.displayName) ? preset.name : preset.displayName;
+        }
 
         public override void OnInspectorGUI()
         {
@@ -219,26 +218,64 @@ namespace KOZ39.KneeFixer
             using (var scope = new EditorGUI.PropertyScope(position, null, _presetProperty))
             {
                 var currentPreset = (KneeFixerPreset)_presetProperty.objectReferenceValue;
-                var presetIndex = Mathf.Max(0, Array.IndexOf(_presets, currentPreset));
+                var hasMixedPresets = _presetProperty.hasMultipleDifferentValues;
+                var displayName = hasMixedPresets
+                    ? "\u2014"
+                    : GetDisplayName(currentPreset).Replace("/", " - ");
 
-                EditorGUI.BeginChangeCheck();
+                var buttonRect = EditorGUI.PrefixLabel(position, scope.content);
 
-                presetIndex = EditorGUI.Popup(position, scope.content, presetIndex, _displayNames);
-
-                if (!EditorGUI.EndChangeCheck())
+                if (
+                    !EditorGUI.DropdownButton(
+                        buttonRect,
+                        new GUIContent(displayName),
+                        FocusType.Keyboard,
+                        EditorStyles.popup
+                    )
+                )
                 {
                     return;
                 }
 
-                var preset = _presets[presetIndex];
+                var menu = new GenericMenu();
 
-                if (preset == null)
+                foreach (var preset in _presets)
                 {
-                    PreserveKneeDepths();
+                    menu.AddItem(
+                        new GUIContent(GetDisplayName(preset)),
+                        !hasMixedPresets && preset == currentPreset,
+                        () => ApplyPreset(preset)
+                    );
                 }
 
-                _presetProperty.objectReferenceValue = preset;
+                menu.DropDown(buttonRect);
             }
+        }
+
+        private void ApplyPreset(KneeFixerPreset preset)
+        {
+            if (this == null || target == null)
+            {
+                return;
+            }
+
+            serializedObject.Update();
+
+            var hasMixedPresets = _presetProperty.hasMultipleDifferentValues;
+
+            if (!hasMixedPresets && _presetProperty.objectReferenceValue == preset)
+            {
+                return;
+            }
+
+            if (preset == null)
+            {
+                PreserveKneeDepths();
+            }
+
+            _presetProperty.objectReferenceValue = preset;
+            serializedObject.ApplyModifiedProperties();
+            Repaint();
         }
 
         private void PreserveKneeDepths()

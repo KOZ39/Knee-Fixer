@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Changed
+
+- Manuka 프리셋을 하위 메뉴로 구성
+
 ### Fixed
 
 - 프리셋 수동 해제 시 무릎 깊이가 이전 값으로 돌아가는 문제
