@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### Added
+
+- 프리셋
+    - Eku
+
 ### Changed
 
 - Manuka 프리셋을 하위 메뉴로 구성
