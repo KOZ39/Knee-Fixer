@@ -11,7 +11,7 @@
 
 ## インストール
 
-[VPMリポジトリ](https://koz39.github.io/vpm-listing/)で「Add to VCC」を押し、VCCまたはALCOMでKnee Fixerを追加します。
+[VPMリポジトリ](https://koz39.github.io/vpm-listing/)で「Add to VCC」を押してリポジトリを追加した後、VCCまたはALCOMのプロジェクトの管理画面でKnee Fixerパッケージを追加します。
 
 ## 使い方
 
