@@ -1,26 +1,26 @@
 # Knee Fixer
 
-English | [한국어](README_KO.md) | [日本語](README_JA.md)
+[English](README.md) | 한국어 | [日本語](README_JA.md)
 
-> A non-destructive knee correction tool for VRChat avatars.
+> VRChat 아바타의 무릎을 비파괴 방식으로 보정하는 도구입니다.
 
-## Requirements
+## 요구 사항
 
 - Unity 2022.3.22f1
 - [Modular Avatar](https://modular-avatar.nadena.dev/)
 
-## Installation
+## 설치
 
-Click "Add to VCC" on the [VPM listing](https://koz39.github.io/vpm-listing/), then add Knee Fixer in VCC or ALCOM.
+[VPM 저장소](https://koz39.github.io/vpm-listing/)에서 "Add to VCC"를 누른 뒤, VCC 또는 ALCOM에서 Knee Fixer를 추가합니다.
 
-## How to Use
+## 사용법
 
-1. Right-click your avatar in the Hierarchy and select Knee Fixer > Setup.
-2. Select the preset that matches your avatar in the Inspector.
-3. If no preset is available, adjust the Knee Depth value manually. You can also create a custom preset with Create > Knee Fixer > Preset in the Project window.
-4. Knee Fixer is applied automatically when the avatar is built.
+1. 하이어라키에서 아바타를 우클릭하고 Knee Fixer > Setup을 선택합니다.
+2. 인스펙터에서 아바타에 맞는 프리셋을 선택합니다.
+3. 프리셋이 없으면 Knee Depth 값을 직접 조절합니다. 프로젝트 창의 Create > Knee Fixer > Preset으로 커스텀 프리셋을 만들 수도 있습니다.
+4. 아바타를 빌드할 때 자동으로 적용됩니다.
 
-## Built-in Avatar Presets
+## 내장 아바타 프리셋
 
 - [Karin (カリン)](https://komado.booth.pm/items/3470989)
 - [Lime (ライム)](https://komado.booth.pm/items/4876459)
@@ -34,7 +34,7 @@ Click "Add to VCC" on the [VPM listing](https://koz39.github.io/vpm-listing/), t
 - [Milfy (ミルフィ)](https://mk22.booth.pm/items/6571299)
 - [Eku (エク)](https://septem47.booth.pm/items/7328764)
 
-## References
+## 참고 자료
 
 - [소소 팁) 블렌더 무릎 2중 관절 리깅](https://gall.dcinside.com/m/vr/3952531)
 - [しなのちゃんの指を曲げたときのこれ…](https://x.com/FUKA_VR/status/1840250299581379069)
