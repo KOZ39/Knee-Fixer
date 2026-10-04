@@ -1,4 +1,5 @@
 using nadena.dev.ndmf;
+using UnityEngine;
 
 [assembly: ExportsPlugin(typeof(global::KOZ39.KneeFixer.KneeFixerPlugin))]
 
@@ -13,7 +14,31 @@ namespace KOZ39.KneeFixer
         {
             InPhase(BuildPhase.Transforming)
                 .AfterPlugin("nadena.dev.modular-avatar")
-                .Run(KneeFixerPackageInfo.DisplayName, KneeFixerPass.Execute);
+                .Run(KneeFixerPackageInfo.DisplayName, Execute);
+        }
+
+        private static void Execute(BuildContext ctx)
+        {
+            var animator = ctx.AvatarRootObject.GetComponent<Animator>();
+
+            if (animator == null || !animator.isHuman)
+            {
+                return;
+            }
+
+            var (primaryFixer, fixers) = KneeFixerUtility.FindFixers(ctx.AvatarRootObject);
+
+            if (primaryFixer == null)
+            {
+                return;
+            }
+
+            KneeFixerBuilder.Build(animator, primaryFixer);
+
+            foreach (var fixer in fixers)
+            {
+                Object.DestroyImmediate(fixer);
+            }
         }
     }
 }
