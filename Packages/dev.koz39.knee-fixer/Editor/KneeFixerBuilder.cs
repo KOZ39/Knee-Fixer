@@ -1,4 +1,5 @@
 using UnityEngine;
+using VRC.SDK3.Dynamics.Constraint.Components;
 
 namespace KOZ39.KneeFixer
 {
@@ -41,6 +42,17 @@ namespace KOZ39.KneeFixer
                 return;
             }
 
+            if (lower.TryGetComponent<VRCPositionConstraint>(out _))
+            {
+                var leg = side == "L" ? "left" : "right";
+
+                Debug.LogWarning(
+                    $"[{KneeFixerPackageInfo.DisplayName}] Skipped {leg} leg: '{lower.name}' already has a VRC Position Constraint.",
+                    lower
+                );
+                return;
+            }
+
             var knee = CreateKnee(upper, lower, side, kneeDepth, animator.transform);
             var target = CreateTarget(lower, knee);
 
@@ -65,14 +77,15 @@ namespace KOZ39.KneeFixer
             return knee;
         }
 
+        // Replaces the Z coordinate in avatar root space (absolute value, not an offset).
         private static Vector3 CalculateKneePosition(
             Transform avatarRoot,
             Vector3 worldPosition,
-            float localDepth
+            float localZ
         )
         {
             var localPosition = avatarRoot.InverseTransformPoint(worldPosition);
-            localPosition.z = localDepth;
+            localPosition.z = localZ;
 
             return avatarRoot.TransformPoint(localPosition);
         }

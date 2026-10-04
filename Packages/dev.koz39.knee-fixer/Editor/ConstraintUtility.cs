@@ -6,6 +6,8 @@ namespace KOZ39.KneeFixer
 {
     internal static class ConstraintUtility
     {
+        // Source Weight = 0.5 blends with the rest rotation, so the knee follows half of the lower leg's rotation.
+        // Differs from GlobalWeight = 0.5 with Source Weight = 1.0; do not change.
         public static void SetupRotationConstraint(GameObject target, Transform source) =>
             SetupConstraint<VRCRotationConstraint>(target, source, 0.5f);
 

@@ -1,5 +1,12 @@
 # 변경 내역
 
+## Unreleased
+
+### Changed
+
+- LowerLeg 본에 VRC Position Constraint가 이미 있는 다리는 제외하고 경고 표시
+- 아바타 빌드 시 Modular Avatar 이후에 적용
+
 ## v2.2.0 (2026-10-02)
 
 ### Added

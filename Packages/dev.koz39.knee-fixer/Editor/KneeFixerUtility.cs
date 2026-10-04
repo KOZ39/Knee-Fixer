@@ -14,7 +14,7 @@ namespace KOZ39.KneeFixer
             return descriptor != null ? descriptor.gameObject : null;
         }
 
-        public static (KneeFixer primary, KneeFixer[] fixers) FindPrimary(GameObject avatarRoot)
+        public static (KneeFixer primary, KneeFixer[] fixers) FindFixers(GameObject avatarRoot)
         {
             if (avatarRoot == null)
             {
@@ -25,7 +25,7 @@ namespace KOZ39.KneeFixer
             KneeFixer primaryFixer = null;
             var primaryDepth = int.MaxValue;
 
-            FindPrimary(
+            CollectFixers(
                 avatarRoot.transform,
                 avatarRoot.transform,
                 0,
@@ -37,7 +37,7 @@ namespace KOZ39.KneeFixer
             return (primaryFixer, foundFixers.ToArray());
         }
 
-        private static void FindPrimary(
+        private static void CollectFixers(
             Transform current,
             Transform avatarRoot,
             int depth,
@@ -72,7 +72,7 @@ namespace KOZ39.KneeFixer
 
             for (var i = 0; i < current.childCount; i++)
             {
-                FindPrimary(
+                CollectFixers(
                     current.GetChild(i),
                     avatarRoot,
                     depth + 1,

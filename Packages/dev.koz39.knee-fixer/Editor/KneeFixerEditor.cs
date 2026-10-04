@@ -72,7 +72,7 @@ namespace KOZ39.KneeFixer
             if (preset == null)
             {
                 Debug.LogWarning(
-                    $"Failed to load a Knee Fixer preset from '{path}' (GUID: {guid})."
+                    $"[{KneeFixerPackageInfo.DisplayName}] Failed to load a preset from '{path}' (GUID: {guid})."
                 );
             }
 
@@ -125,12 +125,12 @@ namespace KOZ39.KneeFixer
 
             if (hasPrimaryFixer)
             {
-                DrawWarning(GetDuplicateWarningMessage(true), duplicateFixers);
+                DrawWarning(GetDuplicateWarningMessage(isPrimaryFixer: true), duplicateFixers);
             }
 
             if (hasIgnoredFixer)
             {
-                DrawWarning(GetDuplicateWarningMessage(false), duplicateFixers);
+                DrawWarning(GetDuplicateWarningMessage(isPrimaryFixer: false), duplicateFixers);
             }
 
             EditorGUILayout.Space();
@@ -138,10 +138,14 @@ namespace KOZ39.KneeFixer
             return hasIgnoredFixer;
         }
 
-        private (bool hasPrimary, bool hasIgnored, List<KneeFixer> fixers) GetDuplicateInfo()
+        private (
+            bool hasPrimaryFixer,
+            bool hasIgnoredFixer,
+            List<KneeFixer> duplicateFixers
+        ) GetDuplicateInfo()
         {
-            var hasPrimary = false;
-            var hasIgnored = false;
+            var hasPrimaryFixer = false;
+            var hasIgnoredFixer = false;
             var duplicateFixers = new List<KneeFixer>();
 
             foreach (var fixer in targets.Cast<KneeFixer>())
@@ -153,7 +157,7 @@ namespace KOZ39.KneeFixer
                     continue;
                 }
 
-                var (primaryFixer, fixers) = KneeFixerUtility.FindPrimary(avatarRoot);
+                var (primaryFixer, fixers) = KneeFixerUtility.FindFixers(avatarRoot);
 
                 if (fixers.Length < 2)
                 {
@@ -170,15 +174,15 @@ namespace KOZ39.KneeFixer
 
                 if (fixer == primaryFixer)
                 {
-                    hasPrimary = true;
+                    hasPrimaryFixer = true;
                 }
                 else
                 {
-                    hasIgnored = true;
+                    hasIgnoredFixer = true;
                 }
             }
 
-            return (hasPrimary, hasIgnored, duplicateFixers);
+            return (hasPrimaryFixer, hasIgnoredFixer, duplicateFixers);
         }
 
         private string GetDuplicateWarningMessage(bool isPrimaryFixer)

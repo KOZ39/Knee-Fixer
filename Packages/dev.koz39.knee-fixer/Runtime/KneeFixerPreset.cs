@@ -8,6 +8,7 @@ namespace KOZ39.KneeFixer
     {
         [FormerlySerializedAs("DisplayName")]
         public string displayName;
+
         public float kneeDepth;
     }
 }

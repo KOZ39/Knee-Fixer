@@ -14,7 +14,7 @@ namespace KOZ39.KneeFixer
                 return;
             }
 
-            var (primaryFixer, fixers) = KneeFixerUtility.FindPrimary(ctx.AvatarRootObject);
+            var (primaryFixer, fixers) = KneeFixerUtility.FindFixers(ctx.AvatarRootObject);
 
             if (primaryFixer == null)
             {

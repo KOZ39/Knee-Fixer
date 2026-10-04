@@ -12,6 +12,7 @@ namespace KOZ39.KneeFixer
         protected override void Configure()
         {
             InPhase(BuildPhase.Transforming)
+                .AfterPlugin("nadena.dev.modular-avatar")
                 .Run(KneeFixerPackageInfo.DisplayName, KneeFixerPass.Execute);
         }
     }
