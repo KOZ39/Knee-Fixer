@@ -12,13 +12,39 @@ namespace KOZ39.KneeFixer
 
         protected override void Configure()
         {
+            InPhase(BuildPhase.Resolving)
+                .BeforePlugin("nadena.dev.modular-avatar")
+                .Run($"{KneeFixerPackageInfo.DisplayName} (Resolve)", Resolve);
+
             InPhase(BuildPhase.Transforming)
                 .AfterPlugin("nadena.dev.modular-avatar")
-                .Run(KneeFixerPackageInfo.DisplayName, Execute);
+                .Run($"{KneeFixerPackageInfo.DisplayName} (Build)", Build);
         }
 
-        private static void Execute(BuildContext ctx)
+        private static void Resolve(BuildContext ctx)
         {
+            var (primaryFixer, fixers) = KneeFixerUtility.FindFixers(ctx.AvatarRootObject);
+
+            if (primaryFixer != null)
+            {
+                ctx.GetState<KneeFixerState>().KneeDepth = primaryFixer.EffectiveKneeDepth;
+            }
+
+            foreach (var fixer in fixers)
+            {
+                Object.DestroyImmediate(fixer);
+            }
+        }
+
+        private static void Build(BuildContext ctx)
+        {
+            var kneeDepth = ctx.GetState<KneeFixerState>().KneeDepth;
+
+            if (kneeDepth == null)
+            {
+                return;
+            }
+
             var animator = ctx.AvatarRootObject.GetComponent<Animator>();
 
             if (animator == null || !animator.isHuman)
@@ -26,19 +52,12 @@ namespace KOZ39.KneeFixer
                 return;
             }
 
-            var (primaryFixer, fixers) = KneeFixerUtility.FindFixers(ctx.AvatarRootObject);
+            KneeFixerBuilder.Build(animator, kneeDepth.Value);
+        }
 
-            if (primaryFixer == null)
-            {
-                return;
-            }
-
-            KneeFixerBuilder.Build(animator, primaryFixer);
-
-            foreach (var fixer in fixers)
-            {
-                Object.DestroyImmediate(fixer);
-            }
+        private class KneeFixerState
+        {
+            public float? KneeDepth;
         }
     }
 }

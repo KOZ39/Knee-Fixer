@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations;
 using VRC.Dynamics;
 using VRC.SDK3.Dynamics.Constraint.Components;
 
@@ -6,16 +8,17 @@ namespace KOZ39.KneeFixer
 {
     internal static class KneeFixerBuilder
     {
-        public static void Build(Animator animator, KneeFixer fixer)
+        public static void Build(Animator animator, float kneeDepth)
         {
-            var kneeDepth = fixer.EffectiveKneeDepth;
+            var positionDrivenTransforms = CollectPositionDrivenTransforms(animator.transform);
 
             BuildSide(
                 animator,
                 HumanBodyBones.LeftUpperLeg,
                 HumanBodyBones.LeftLowerLeg,
                 "L",
-                kneeDepth
+                kneeDepth,
+                positionDrivenTransforms
             );
 
             BuildSide(
@@ -23,8 +26,41 @@ namespace KOZ39.KneeFixer
                 HumanBodyBones.RightUpperLeg,
                 HumanBodyBones.RightLowerLeg,
                 "R",
-                kneeDepth
+                kneeDepth,
+                positionDrivenTransforms
             );
+        }
+
+        private static HashSet<Transform> CollectPositionDrivenTransforms(Transform avatarRoot)
+        {
+            var transforms = new HashSet<Transform>();
+
+            foreach (var constraint in avatarRoot.GetComponentsInChildren<VRCConstraintBase>(true))
+            {
+                if (!(constraint is VRCPositionConstraint || constraint is VRCParentConstraint))
+                {
+                    continue;
+                }
+
+                // Avoid ?? because it ignores Unity's destroyed/missing object checks.
+                transforms.Add(
+                    constraint.TargetTransform != null
+                        ? constraint.TargetTransform
+                        : constraint.transform
+                );
+            }
+
+            foreach (var constraint in avatarRoot.GetComponentsInChildren<PositionConstraint>(true))
+            {
+                transforms.Add(constraint.transform);
+            }
+
+            foreach (var constraint in avatarRoot.GetComponentsInChildren<ParentConstraint>(true))
+            {
+                transforms.Add(constraint.transform);
+            }
+
+            return transforms;
         }
 
         private static void BuildSide(
@@ -32,7 +68,8 @@ namespace KOZ39.KneeFixer
             HumanBodyBones upperBone,
             HumanBodyBones lowerBone,
             string side,
-            float kneeDepth
+            float kneeDepth,
+            HashSet<Transform> positionDrivenTransforms
         )
         {
             var upper = animator.GetBoneTransform(upperBone);
@@ -43,12 +80,12 @@ namespace KOZ39.KneeFixer
                 return;
             }
 
-            if (lower.TryGetComponent<VRCPositionConstraint>(out _))
+            if (positionDrivenTransforms.Contains(lower))
             {
                 var leg = side == "L" ? "left" : "right";
 
                 Debug.LogWarning(
-                    $"[{KneeFixerPackageInfo.DisplayName}] Skipped {leg} leg: '{lower.name}' already has a VRC Position Constraint.",
+                    $"[{KneeFixerPackageInfo.DisplayName}] Skipped {leg} leg: '{lower.name}' is already driven by a position or parent constraint.",
                     lower
                 );
                 return;

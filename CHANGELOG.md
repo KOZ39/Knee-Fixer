@@ -4,7 +4,7 @@
 
 ### Changed
 
-- LowerLeg 본에 VRC Position Constraint가 이미 있는 다리는 제외하고 경고 표시
+- LowerLeg 본이 이미 Position·Parent Constraint(VRC, Unity)로 움직이는 다리는 제외하고 경고 표시
 - 아바타 빌드 시 Modular Avatar 이후에 적용
 
 ## v2.2.0 (2026-10-02)
@@ -20,7 +20,7 @@
 
 ### Fixed
 
-- 프리셋을 None으로 변경 시 무릎 깊이가 이전 값으로 돌아가는 문제
+- None 프리셋 선택 시 무릎 깊이가 이전 값으로 돌아가는 문제
 - 프로젝트 창에서 프리팹 에셋 선택 후 Setup 실행 시 오류
 
 ## v2.1.4 (2026-09-10)
