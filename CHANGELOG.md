@@ -7,6 +7,10 @@
 - LowerLeg 본이 이미 Position·Parent Constraint(VRC, Unity)로 움직이는 다리는 제외하고 경고 표시
 - 아바타 빌드 시 Modular Avatar 이후에 적용
 
+### Fixed
+
+- 표시 이름이 같은 프리셋이 목록에 하나만 표시되는 문제
+
 ## v2.2.0 (2026-10-02)
 
 ### Added

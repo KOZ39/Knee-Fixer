@@ -14,6 +14,7 @@ namespace KOZ39.KneeFixer
         private SerializedProperty _kneeDepthProperty;
 
         private KneeFixerPreset[] _presets = Array.Empty<KneeFixerPreset>();
+        private HashSet<string> _duplicateDisplayNames = new();
 
         private void OnEnable()
         {
@@ -58,8 +59,15 @@ namespace KOZ39.KneeFixer
                 .Select(LoadPreset)
                 .Where(preset => preset != null)
                 .OrderBy(GetDisplayName)
+                .ThenBy(preset => preset.name)
                 .Prepend((KneeFixerPreset)null)
                 .ToArray();
+
+            _duplicateDisplayNames = _presets
+                .GroupBy(GetDisplayName)
+                .Where(group => group.Count() > 1)
+                .Select(group => group.Key)
+                .ToHashSet();
 
             Repaint();
         }
@@ -87,6 +95,15 @@ namespace KOZ39.KneeFixer
             }
 
             return string.IsNullOrWhiteSpace(preset.displayName) ? preset.name : preset.displayName;
+        }
+
+        private string GetLabel(KneeFixerPreset preset)
+        {
+            var displayName = GetDisplayName(preset);
+
+            return preset != null && _duplicateDisplayNames.Contains(displayName)
+                ? $"{displayName} ({preset.name})"
+                : displayName;
         }
 
         public override void OnInspectorGUI()
@@ -223,16 +240,16 @@ namespace KOZ39.KneeFixer
             {
                 var currentPreset = (KneeFixerPreset)_presetProperty.objectReferenceValue;
                 var hasMixedPresets = _presetProperty.hasMultipleDifferentValues;
-                var displayName = hasMixedPresets
+                var label = hasMixedPresets
                     ? "\u2014"
-                    : GetDisplayName(currentPreset).Replace("/", " - ");
+                    : GetLabel(currentPreset).Replace("/", " - ");
 
                 var buttonRect = EditorGUI.PrefixLabel(position, scope.content);
 
                 if (
                     !EditorGUI.DropdownButton(
                         buttonRect,
-                        new GUIContent(displayName),
+                        new GUIContent(label),
                         FocusType.Keyboard,
                         EditorStyles.popup
                     )
@@ -241,12 +258,12 @@ namespace KOZ39.KneeFixer
                     return;
                 }
 
-                var menu = new GenericMenu();
+                var menu = new GenericMenu { allowDuplicateNames = true };
 
                 foreach (var preset in _presets)
                 {
                     menu.AddItem(
-                        new GUIContent(GetDisplayName(preset)),
+                        new GUIContent(GetLabel(preset)),
                         !hasMixedPresets && preset == currentPreset,
                         () => ApplyPreset(preset)
                     );
