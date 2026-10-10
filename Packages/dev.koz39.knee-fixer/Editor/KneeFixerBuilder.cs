@@ -145,18 +145,18 @@ namespace KOZ39.KneeFixer
 
         private static void SetupConstraints(GameObject knee, Transform lower, GameObject target)
         {
-            // Source Weight = 0.5 blends with the rest rotation, so the knee follows half of the lower leg's rotation.
-            // Differs from GlobalWeight = 0.5 with Source Weight = 1.0; do not change.
-            SetupConstraint<VRCRotationConstraint>(knee, lower, 0.5f);
-            SetupConstraint<VRCPositionConstraint>(lower.gameObject, target.transform, 1f);
+            // A single source's weight is normalized by the SDK, so only GlobalWeight could halve the rotation.
+            // Keep GlobalWeight at 1; 0.5 would make the knee follow only half of the lower leg's rotation.
+            SetupConstraint<VRCRotationConstraint>(knee, lower);
+            SetupConstraint<VRCPositionConstraint>(lower.gameObject, target.transform);
         }
 
-        private static void SetupConstraint<T>(GameObject target, Transform source, float weight)
+        private static void SetupConstraint<T>(GameObject target, Transform source)
             where T : VRCConstraintBase
         {
             var constraint = target.AddComponent<T>();
 
-            constraint.Sources.Add(new VRCConstraintSource(source, weight));
+            constraint.Sources.Add(new VRCConstraintSource(source, 1f));
 
             constraint.ZeroConstraint();
         }
