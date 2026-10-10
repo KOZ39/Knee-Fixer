@@ -1,0 +1,37 @@
+msgid ""
+msgstr ""
+"Language: zh-Hant\n"
+
+msgid "labels.Preset"
+msgstr "預設"
+
+msgid "labels.KneeDepth"
+msgstr "膝蓋深度"
+
+msgid "labels.None"
+msgstr "無"
+
+msgid "labels.Left"
+msgstr "左"
+
+msgid "labels.Right"
+msgstr "右"
+
+msgid "buttons.Select"
+msgstr "選擇"
+
+msgid "messages.DuplicateUsed"
+msgstr "存在多個 Knee Fixer 元件。將使用此元件。"
+
+msgid "messages.DuplicateIgnored"
+msgstr "存在多個 Knee Fixer 元件。此元件將被忽略。"
+
+msgid "messages.DuplicateSomeUsed"
+msgstr "存在多個 Knee Fixer 元件。將使用部分所選元件。"
+
+msgid "messages.DuplicateSomeIgnored"
+msgstr "存在多個 Knee Fixer 元件。部分所選元件將被忽略。"
+
+#. {0}: 左或右, {1}: 骨骼名稱
+msgid "warnings.ConstrainedLeg"
+msgstr "已略過{0}腿。「{1}」已由 Position Constraint 或 Parent Constraint 驅動。"

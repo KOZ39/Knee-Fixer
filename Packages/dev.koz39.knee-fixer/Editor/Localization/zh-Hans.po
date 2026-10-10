@@ -1,0 +1,37 @@
+msgid ""
+msgstr ""
+"Language: zh-Hans\n"
+
+msgid "labels.Preset"
+msgstr "预设"
+
+msgid "labels.KneeDepth"
+msgstr "膝盖深度"
+
+msgid "labels.None"
+msgstr "无"
+
+msgid "labels.Left"
+msgstr "左"
+
+msgid "labels.Right"
+msgstr "右"
+
+msgid "buttons.Select"
+msgstr "选择"
+
+msgid "messages.DuplicateUsed"
+msgstr "存在多个 Knee Fixer 组件。将使用此组件。"
+
+msgid "messages.DuplicateIgnored"
+msgstr "存在多个 Knee Fixer 组件。此组件将被忽略。"
+
+msgid "messages.DuplicateSomeUsed"
+msgstr "存在多个 Knee Fixer 组件。将使用部分所选组件。"
+
+msgid "messages.DuplicateSomeIgnored"
+msgstr "存在多个 Knee Fixer 组件。部分所选组件将被忽略。"
+
+#. {0}: 左或右, {1}: 骨骼名称
+msgid "warnings.ConstrainedLeg"
+msgstr "已跳过{0}腿。“{1}” 已由 Position Constraint 或 Parent Constraint 驱动。"

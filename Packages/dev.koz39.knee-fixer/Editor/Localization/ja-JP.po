@@ -1,0 +1,37 @@
+msgid ""
+msgstr ""
+"Language: ja-JP\n"
+
+msgid "labels.Preset"
+msgstr "プリセット"
+
+msgid "labels.KneeDepth"
+msgstr "膝の深さ"
+
+msgid "labels.None"
+msgstr "なし"
+
+msgid "labels.Left"
+msgstr "左"
+
+msgid "labels.Right"
+msgstr "右"
+
+msgid "buttons.Select"
+msgstr "選択"
+
+msgid "messages.DuplicateUsed"
+msgstr "Knee Fixerコンポーネントが複数あります。このコンポーネントが適用されます。"
+
+msgid "messages.DuplicateIgnored"
+msgstr "Knee Fixerコンポーネントが複数あります。このコンポーネントは無視されます。"
+
+msgid "messages.DuplicateSomeUsed"
+msgstr "Knee Fixerコンポーネントが複数あります。選択したコンポーネントの一部が適用されます。"
+
+msgid "messages.DuplicateSomeIgnored"
+msgstr "Knee Fixerコンポーネントが複数あります。選択したコンポーネントの一部は無視されます。"
+
+#. {0}: 左または右, {1}: ボーン名
+msgid "warnings.ConstrainedLeg"
+msgstr "{0}脚をスキップしました。「{1}」はすでにPosition ConstraintまたはParent Constraintで動いています。"

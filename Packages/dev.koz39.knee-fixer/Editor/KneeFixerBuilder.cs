@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using nadena.dev.ndmf;
 using UnityEngine;
 using UnityEngine.Animations;
 using VRC.Dynamics;
@@ -82,12 +83,17 @@ namespace KOZ39.KneeFixer
 
             if (positionDrivenTransforms.Contains(lower))
             {
-                var leg = side == "L" ? "left" : "right";
+                using (ErrorReport.WithContextObject(lower))
+                {
+                    ErrorReport.ReportError(
+                        KneeFixerLocalization.Localizer,
+                        ErrorSeverity.NonFatal,
+                        "warnings.ConstrainedLeg",
+                        KneeFixerLocalization.Text(side == "L" ? "labels.Left" : "labels.Right"),
+                        lower.name
+                    );
+                }
 
-                Debug.LogWarning(
-                    $"[{KneeFixerPackageInfo.DisplayName}] Skipped {leg} leg: '{lower.name}' is already driven by a position or parent constraint.",
-                    lower
-                );
                 return;
             }
 
@@ -115,7 +121,6 @@ namespace KOZ39.KneeFixer
             return knee;
         }
 
-        // Replaces the Z coordinate in avatar root space (absolute value, not an offset).
         private static Vector3 CalculateKneePosition(
             Transform avatarRoot,
             Vector3 worldPosition,

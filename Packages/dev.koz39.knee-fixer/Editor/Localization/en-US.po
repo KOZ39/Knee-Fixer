@@ -1,0 +1,37 @@
+msgid ""
+msgstr ""
+"Language: en-US\n"
+
+msgid "labels.Preset"
+msgstr "Preset"
+
+msgid "labels.KneeDepth"
+msgstr "Knee Depth"
+
+msgid "labels.None"
+msgstr "None"
+
+msgid "labels.Left"
+msgstr "left"
+
+msgid "labels.Right"
+msgstr "right"
+
+msgid "buttons.Select"
+msgstr "Select"
+
+msgid "messages.DuplicateUsed"
+msgstr "Multiple Knee Fixer components were found. This component will be used."
+
+msgid "messages.DuplicateIgnored"
+msgstr "Multiple Knee Fixer components were found. This component will be ignored."
+
+msgid "messages.DuplicateSomeUsed"
+msgstr "Multiple Knee Fixer components were found. Some selected components will be used."
+
+msgid "messages.DuplicateSomeIgnored"
+msgstr "Multiple Knee Fixer components were found. Some selected components will be ignored."
+
+#. {0}: left or right, {1}: bone name
+msgid "warnings.ConstrainedLeg"
+msgstr "Skipped the {0} leg: '{1}' is already driven by a Position Constraint or Parent Constraint."

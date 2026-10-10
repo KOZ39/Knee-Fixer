@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using nadena.dev.ndmf.ui;
 using UnityEditor;
 using UnityEngine;
+using static KOZ39.KneeFixer.KneeFixerLocalization;
 
 namespace KOZ39.KneeFixer
 {
@@ -91,7 +93,7 @@ namespace KOZ39.KneeFixer
         {
             if (preset == null)
             {
-                return "None";
+                return Text("labels.None");
             }
 
             return string.IsNullOrWhiteSpace(preset.displayName) ? preset.name : preset.displayName;
@@ -120,6 +122,9 @@ namespace KOZ39.KneeFixer
             }
 
             serializedObject.ApplyModifiedProperties();
+
+            EditorGUILayout.Space();
+            LanguageSwitcher.DrawImmediate();
         }
 
         private static void DrawInfo()
@@ -204,10 +209,16 @@ namespace KOZ39.KneeFixer
 
         private string GetDuplicateWarningMessage(bool isPrimaryFixer)
         {
-            var subject = targets.Length == 1 ? "This component" : "Some selected components";
-            var result = isPrimaryFixer ? "used" : "ignored";
+            if (targets.Length == 1)
+            {
+                return Text(
+                    isPrimaryFixer ? "messages.DuplicateUsed" : "messages.DuplicateIgnored"
+                );
+            }
 
-            return $"Multiple Knee Fixer components were found. {subject} will be {result}.";
+            return Text(
+                isPrimaryFixer ? "messages.DuplicateSomeUsed" : "messages.DuplicateSomeIgnored"
+            );
         }
 
         private static void DrawWarning(string message, List<KneeFixer> fixers)
@@ -216,7 +227,13 @@ namespace KOZ39.KneeFixer
             {
                 EditorGUILayout.HelpBox(message, MessageType.Warning);
 
-                if (GUILayout.Button("Select", GUILayout.Width(80f), GUILayout.ExpandHeight(true)))
+                if (
+                    GUILayout.Button(
+                        Text("buttons.Select"),
+                        GUILayout.Width(80f),
+                        GUILayout.ExpandHeight(true)
+                    )
+                )
                 {
                     SelectFixers(fixers);
                 }
@@ -236,7 +253,13 @@ namespace KOZ39.KneeFixer
             var position = EditorGUILayout.GetControlRect();
 
             using (new EditorGUI.PropertyScope(position, GUIContent.none, _kneeDepthProperty))
-            using (var scope = new EditorGUI.PropertyScope(position, null, _presetProperty))
+            using (
+                var scope = new EditorGUI.PropertyScope(
+                    position,
+                    new GUIContent(Text("labels.Preset")),
+                    _presetProperty
+                )
+            )
             {
                 var currentPreset = (KneeFixerPreset)_presetProperty.objectReferenceValue;
                 var hasMixedPresets = _presetProperty.hasMultipleDifferentValues;
@@ -317,7 +340,13 @@ namespace KOZ39.KneeFixer
             var position = EditorGUILayout.GetControlRect();
 
             using (new EditorGUI.PropertyScope(position, GUIContent.none, _presetProperty))
-            using (var scope = new EditorGUI.PropertyScope(position, null, _kneeDepthProperty))
+            using (
+                var scope = new EditorGUI.PropertyScope(
+                    position,
+                    new GUIContent(Text("labels.KneeDepth")),
+                    _kneeDepthProperty
+                )
+            )
             {
                 var hasMixedPresets = _presetProperty.hasMultipleDifferentValues;
                 var currentPreset = (KneeFixerPreset)_presetProperty.objectReferenceValue;
