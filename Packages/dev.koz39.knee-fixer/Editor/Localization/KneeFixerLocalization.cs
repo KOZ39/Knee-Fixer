@@ -11,7 +11,7 @@ namespace KOZ39.KneeFixer
         private const string Folder =
             "Packages/" + KneeFixerPackageInfo.Name + "/Editor/Localization";
 
-        internal static readonly Localizer Localizer = new Localizer(
+        internal static readonly Localizer Localizer = new(
             "en-US",
             () =>
                 AssetDatabase
