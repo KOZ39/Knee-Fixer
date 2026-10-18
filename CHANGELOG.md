@@ -1,5 +1,13 @@
 # 변경 내역
 
+## v2.3.1 (2026-10-19)
+
+### Fixed
+
+- EditorOnly 오브젝트 또는 다른 아바타 아래에 있어 무시되는 Knee Fixer의 인스펙터 경고 누락
+- 아바타 밖에 있는 Knee Fixer의 인스펙터 경고 누락
+- Humanoid Animator가 없는 아바타 빌드 시 NDMF 콘솔 경고 누락
+
 ## v2.3.0 (2026-10-10)
 
 ### Added
