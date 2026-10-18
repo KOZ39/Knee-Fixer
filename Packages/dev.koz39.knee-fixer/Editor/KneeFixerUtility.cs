@@ -7,21 +7,22 @@ namespace KOZ39.KneeFixer
 {
     internal static class KneeFixerUtility
     {
+        // NDMF builds the outermost avatar, so the inspector must judge fixers against the same root.
         public static GameObject FindAvatarRoot(KneeFixer fixer)
         {
-            var descriptor = fixer.GetComponentInParent<VRCAvatarDescriptor>(true);
+            var descriptors = fixer.GetComponentsInParent<VRCAvatarDescriptor>(true);
 
-            return descriptor != null ? descriptor.gameObject : null;
+            return descriptors.Length > 0 ? descriptors[descriptors.Length - 1].gameObject : null;
         }
 
-        public static (KneeFixer primary, KneeFixer[] fixers) FindFixers(GameObject avatarRoot)
+        public static (KneeFixer Primary, KneeFixer[] All) FindFixers(GameObject avatarRoot)
         {
             if (avatarRoot == null)
             {
                 return (null, Array.Empty<KneeFixer>());
             }
 
-            var foundFixers = new List<KneeFixer>();
+            var fixers = new List<KneeFixer>();
             KneeFixer primaryFixer = null;
             var primaryDepth = int.MaxValue;
 
@@ -29,12 +30,12 @@ namespace KOZ39.KneeFixer
                 avatarRoot.transform,
                 avatarRoot.transform,
                 0,
-                foundFixers,
+                fixers,
                 ref primaryFixer,
                 ref primaryDepth
             );
 
-            return (primaryFixer, foundFixers.ToArray());
+            return (primaryFixer, fixers.ToArray());
         }
 
         private static void CollectFixers(

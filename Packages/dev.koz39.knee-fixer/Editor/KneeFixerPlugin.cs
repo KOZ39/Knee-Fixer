@@ -12,6 +12,7 @@ namespace KOZ39.KneeFixer
 
         protected override void Configure()
         {
+            // Before Modular Avatar moves objects, so the fixer used matches the one the inspector shows.
             InPhase(BuildPhase.Resolving)
                 .BeforePlugin("nadena.dev.modular-avatar")
                 .Run($"{KneeFixerPackageInfo.DisplayName} (Resolve)", Resolve);
@@ -49,6 +50,15 @@ namespace KOZ39.KneeFixer
 
             if (animator == null || !animator.isHuman)
             {
+                using (ErrorReport.WithContextObject(ctx.AvatarRootObject))
+                {
+                    ErrorReport.ReportError(
+                        KneeFixerLocalization.Localizer,
+                        ErrorSeverity.NonFatal,
+                        "warnings.InvalidAvatar"
+                    );
+                }
+
                 return;
             }
 

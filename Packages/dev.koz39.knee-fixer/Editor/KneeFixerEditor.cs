@@ -82,7 +82,7 @@ namespace KOZ39.KneeFixer
             if (preset == null)
             {
                 Debug.LogWarning(
-                    $"[{KneeFixerPackageInfo.DisplayName}] Failed to load a preset from '{path}' (GUID: {guid})."
+                    $"{KneeFixerPackageInfo.LogPrefix} Failed to load a preset from '{path}' (GUID: {guid})."
                 );
             }
 
@@ -113,9 +113,10 @@ namespace KOZ39.KneeFixer
             serializedObject.Update();
 
             DrawInfo();
+            var isExcluded = DrawAvatarWarnings();
             var hasIgnoredFixer = DrawDuplicateWarnings();
 
-            using (new EditorGUI.DisabledScope(hasIgnoredFixer))
+            using (new EditorGUI.DisabledScope(isExcluded || hasIgnoredFixer))
             {
                 DrawPresetPopup();
                 DrawKneeDepth();
@@ -136,6 +137,43 @@ namespace KOZ39.KneeFixer
             EditorGUILayout.Space();
         }
 
+        // A fixer outside an avatar stays editable, for example in a prefab added to an avatar later.
+        private bool DrawAvatarWarnings()
+        {
+            var fixers = targets.Cast<KneeFixer>().ToArray();
+            var isOutsideAvatar = fixers.Any(fixer =>
+                KneeFixerUtility.FindAvatarRoot(fixer) == null
+            );
+            var isExcluded = fixers.Any(IsExcluded);
+
+            if (isOutsideAvatar)
+            {
+                EditorGUILayout.HelpBox(Text("messages.NoAvatar"), MessageType.Warning);
+            }
+
+            if (isExcluded)
+            {
+                var key = targets.Length == 1 ? "messages.Excluded" : "messages.SomeExcluded";
+                EditorGUILayout.HelpBox(Text(key), MessageType.Warning);
+            }
+
+            if (isOutsideAvatar || isExcluded)
+            {
+                EditorGUILayout.Space();
+            }
+
+            return isExcluded;
+        }
+
+        // FindFixers skips EditorOnly objects and nested avatars, so the build never uses these fixers.
+        private static bool IsExcluded(KneeFixer fixer)
+        {
+            var avatarRoot = KneeFixerUtility.FindAvatarRoot(fixer);
+
+            return avatarRoot != null
+                && !KneeFixerUtility.FindFixers(avatarRoot).All.Contains(fixer);
+        }
+
         private bool DrawDuplicateWarnings()
         {
             var (hasPrimaryFixer, hasIgnoredFixer, duplicateFixers) = GetDuplicateInfo();
@@ -147,12 +185,18 @@ namespace KOZ39.KneeFixer
 
             if (hasPrimaryFixer)
             {
-                DrawWarning(GetDuplicateWarningMessage(isPrimaryFixer: true), duplicateFixers);
+                DrawSelectableWarning(
+                    GetDuplicateWarningMessage(isPrimaryFixer: true),
+                    duplicateFixers
+                );
             }
 
             if (hasIgnoredFixer)
             {
-                DrawWarning(GetDuplicateWarningMessage(isPrimaryFixer: false), duplicateFixers);
+                DrawSelectableWarning(
+                    GetDuplicateWarningMessage(isPrimaryFixer: false),
+                    duplicateFixers
+                );
             }
 
             EditorGUILayout.Space();
@@ -161,9 +205,9 @@ namespace KOZ39.KneeFixer
         }
 
         private (
-            bool hasPrimaryFixer,
-            bool hasIgnoredFixer,
-            List<KneeFixer> duplicateFixers
+            bool HasPrimaryFixer,
+            bool HasIgnoredFixer,
+            List<KneeFixer> DuplicateFixers
         ) GetDuplicateInfo()
         {
             var hasPrimaryFixer = false;
@@ -181,7 +225,7 @@ namespace KOZ39.KneeFixer
 
                 var (primaryFixer, fixers) = KneeFixerUtility.FindFixers(avatarRoot);
 
-                if (fixers.Length < 2)
+                if (fixers.Length < 2 || !fixers.Contains(fixer))
                 {
                     continue;
                 }
@@ -221,7 +265,7 @@ namespace KOZ39.KneeFixer
             );
         }
 
-        private static void DrawWarning(string message, List<KneeFixer> fixers)
+        private static void DrawSelectableWarning(string message, List<KneeFixer> fixers)
         {
             using (new EditorGUILayout.HorizontalScope())
             {
@@ -263,6 +307,7 @@ namespace KOZ39.KneeFixer
             {
                 var currentPreset = (KneeFixerPreset)_presetProperty.objectReferenceValue;
                 var hasMixedPresets = _presetProperty.hasMultipleDifferentValues;
+                // A slash makes a submenu in the dropdown, but the button shows the label on one line.
                 var label = hasMixedPresets
                     ? "\u2014"
                     : GetLabel(currentPreset).Replace("/", " - ");
