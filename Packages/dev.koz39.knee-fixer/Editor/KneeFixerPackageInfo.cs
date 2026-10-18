@@ -6,6 +6,7 @@ namespace KOZ39.KneeFixer
     {
         internal const string Name = "dev.koz39.knee-fixer";
         internal const string DisplayName = "Knee Fixer";
+        internal const string LogPrefix = "[" + DisplayName + "]";
 
         private static readonly PackageInfo _info = PackageInfo.FindForAssembly(
             typeof(KneeFixerPackageInfo).Assembly

@@ -17,14 +17,15 @@ namespace KOZ39.KneeFixer
         [MenuItem(GameObjectMenuPath)]
         private static void Setup(MenuCommand command)
         {
-            var ctx = command.context as GameObject;
+            var context = command.context as GameObject;
 
-            if (ctx != null && ctx != Selection.activeGameObject)
+            // With multiple objects selected, Unity invokes the menu once per object.
+            if (context != null && context != Selection.activeGameObject)
             {
                 return;
             }
 
-            var targets = GetTargetAvatars(ctx);
+            var targets = GetTargetAvatars(context);
 
             if (targets.Length == 0)
             {
@@ -72,12 +73,11 @@ namespace KOZ39.KneeFixer
 
         private static GameObject LoadPrefab()
         {
-            var displayName = KneeFixerPackageInfo.DisplayName;
             var path = AssetDatabase.GUIDToAssetPath(PrefabGuid);
 
             if (string.IsNullOrEmpty(path))
             {
-                Debug.LogError($"[{displayName}] Could not find the prefab.");
+                Debug.LogError($"{KneeFixerPackageInfo.LogPrefix} Could not find the prefab.");
 
                 return null;
             }
@@ -86,7 +86,7 @@ namespace KOZ39.KneeFixer
 
             if (prefab == null)
             {
-                Debug.LogError($"[{displayName}] Failed to load the prefab.");
+                Debug.LogError($"{KneeFixerPackageInfo.LogPrefix} Failed to load the prefab.");
             }
 
             return prefab;
@@ -100,7 +100,7 @@ namespace KOZ39.KneeFixer
             if (primaryFixer != null)
             {
                 Debug.LogWarning(
-                    $"[{displayName}] Skipped avatar '{target.name}': {displayName} already exists.",
+                    $"{KneeFixerPackageInfo.LogPrefix} Skipped avatar '{target.name}': {displayName} already exists.",
                     target
                 );
 
@@ -112,7 +112,7 @@ namespace KOZ39.KneeFixer
             if (instance == null)
             {
                 Debug.LogError(
-                    $"[{displayName}] Failed to set up {displayName} on avatar '{target.name}'.",
+                    $"{KneeFixerPackageInfo.LogPrefix} Failed to set up {displayName} on avatar '{target.name}'.",
                     target
                 );
 

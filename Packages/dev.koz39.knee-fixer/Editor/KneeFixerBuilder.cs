@@ -151,10 +151,10 @@ namespace KOZ39.KneeFixer
             SetupConstraint<VRCPositionConstraint>(lower.gameObject, target.transform);
         }
 
-        private static void SetupConstraint<T>(GameObject target, Transform source)
+        private static void SetupConstraint<T>(GameObject owner, Transform source)
             where T : VRCConstraintBase
         {
-            var constraint = target.AddComponent<T>();
+            var constraint = owner.AddComponent<T>();
 
             constraint.Sources.Add(new VRCConstraintSource(source, 1f));
 
