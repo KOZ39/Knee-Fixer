@@ -9,6 +9,9 @@ namespace KOZ39.KneeFixer
 {
     internal static class KneeFixerBuilder
     {
+        // Keeps the generated objects from matching the avatar's own bone names.
+        private const string NamePrefix = "KneeFixer.";
+
         public static void Build(Animator animator, float kneeDepth)
         {
             var positionDrivenTransforms = CollectPositionDrivenTransforms(animator.transform);
@@ -98,7 +101,7 @@ namespace KOZ39.KneeFixer
             }
 
             var knee = CreateKnee(upper, lower, side, kneeDepth, animator.transform);
-            var target = CreateTarget(lower, knee);
+            var target = CreateTarget(lower, knee, side);
 
             SetupConstraints(knee, lower, target);
         }
@@ -111,7 +114,7 @@ namespace KOZ39.KneeFixer
             Transform avatarRoot
         )
         {
-            var knee = new GameObject($"Knee.{side}");
+            var knee = new GameObject($"{NamePrefix}Knee.{side}");
 
             var position = CalculateKneePosition(avatarRoot, lower.position, kneeDepth);
 
@@ -133,9 +136,9 @@ namespace KOZ39.KneeFixer
             return avatarRoot.TransformPoint(localPosition);
         }
 
-        private static GameObject CreateTarget(Transform lower, GameObject knee)
+        private static GameObject CreateTarget(Transform lower, GameObject knee, string side)
         {
-            var target = new GameObject($"{knee.name}.001");
+            var target = new GameObject($"{NamePrefix}Target.{side}");
 
             target.transform.SetPositionAndRotation(lower.position, lower.rotation);
             target.transform.SetParent(knee.transform, true);

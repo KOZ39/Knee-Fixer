@@ -1,5 +1,14 @@
 # 변경 내역
 
+## Unreleased
+
+### Changed
+
+- NDMF 1.8.0 이상 필요
+- 빌드 시 생성하는 오브젝트 이름
+    - `Knee.L` → `KneeFixer.Knee.L`
+    - `Knee.L.001` → `KneeFixer.Target.L`
+
 ## v2.3.1 (2026-10-19)
 
 ### Fixed
