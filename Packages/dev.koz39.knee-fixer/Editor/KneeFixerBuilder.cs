@@ -12,7 +12,7 @@ namespace KOZ39.KneeFixer
         // Keeps the generated objects from matching the avatar's own bone names.
         private const string NamePrefix = "KneeFixer.";
 
-        public static void Build(Animator animator, float kneeDepth)
+        internal static void Build(Animator animator, float kneeDepth)
         {
             var positionDrivenTransforms = CollectPositionDrivenTransforms(animator.transform);
 

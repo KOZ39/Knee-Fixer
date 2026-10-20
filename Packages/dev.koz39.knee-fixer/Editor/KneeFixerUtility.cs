@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
 
@@ -8,80 +8,56 @@ namespace KOZ39.KneeFixer
     internal static class KneeFixerUtility
     {
         // NDMF builds the outermost avatar, so the inspector must judge fixers against the same root.
-        public static GameObject FindAvatarRoot(KneeFixer fixer)
+        internal static GameObject FindAvatarRoot(KneeFixer fixer)
         {
             var descriptors = fixer.GetComponentsInParent<VRCAvatarDescriptor>(true);
 
-            return descriptors.Length > 0 ? descriptors[descriptors.Length - 1].gameObject : null;
+            return descriptors.Length > 0 ? descriptors[^1].gameObject : null;
         }
 
-        public static (KneeFixer Primary, KneeFixer[] All) FindFixers(GameObject avatarRoot)
+        internal static (KneeFixer Primary, KneeFixer[] All) FindFixers(GameObject avatarRoot)
         {
             if (avatarRoot == null)
             {
                 return (null, Array.Empty<KneeFixer>());
             }
 
-            var fixers = new List<KneeFixer>();
-            KneeFixer primaryFixer = null;
-            var primaryDepth = int.MaxValue;
+            var fixers = avatarRoot
+                .GetComponentsInChildren<KneeFixer>(true)
+                .Where(fixer => IsIncluded(fixer.transform, avatarRoot.transform))
+                .OrderBy(fixer => Depth(fixer.transform))
+                .ToArray();
 
-            CollectFixers(
-                avatarRoot.transform,
-                avatarRoot.transform,
-                0,
-                fixers,
-                ref primaryFixer,
-                ref primaryDepth
-            );
-
-            return (primaryFixer, fixers.ToArray());
+            return (fixers.FirstOrDefault(), fixers);
         }
 
-        private static void CollectFixers(
-            Transform current,
-            Transform avatarRoot,
-            int depth,
-            List<KneeFixer> fixers,
-            ref KneeFixer primaryFixer,
-            ref int primaryDepth
-        )
+        // Objects under an EditorOnly object never reach the build, and those under a nested avatar belong to it.
+        private static bool IsIncluded(Transform target, Transform avatarRoot)
         {
-            if (current.CompareTag("EditorOnly"))
+            for (var t = target; t != avatarRoot.parent; t = t.parent)
             {
-                return;
-            }
-
-            var isNestedAvatar =
-                current != avatarRoot && current.TryGetComponent<VRCAvatarDescriptor>(out _);
-
-            if (isNestedAvatar)
-            {
-                return;
-            }
-
-            if (current.TryGetComponent<KneeFixer>(out var currentFixer))
-            {
-                fixers.Add(currentFixer);
-
-                if (depth < primaryDepth)
+                if (
+                    t.CompareTag("EditorOnly")
+                    || (t != avatarRoot && t.TryGetComponent<VRCAvatarDescriptor>(out _))
+                )
                 {
-                    primaryFixer = currentFixer;
-                    primaryDepth = depth;
+                    return false;
                 }
             }
 
-            for (var i = 0; i < current.childCount; i++)
+            return true;
+        }
+
+        private static int Depth(Transform target)
+        {
+            var depth = 0;
+
+            for (var t = target; t.parent != null; t = t.parent)
             {
-                CollectFixers(
-                    current.GetChild(i),
-                    avatarRoot,
-                    depth + 1,
-                    fixers,
-                    ref primaryFixer,
-                    ref primaryDepth
-                );
+                depth++;
             }
+
+            return depth;
         }
     }
 }

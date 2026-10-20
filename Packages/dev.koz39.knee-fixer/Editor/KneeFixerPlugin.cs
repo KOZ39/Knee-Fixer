@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace KOZ39.KneeFixer
 {
-    public class KneeFixerPlugin : Plugin<KneeFixerPlugin>
+    internal class KneeFixerPlugin : Plugin<KneeFixerPlugin>
     {
         public override string DisplayName => KneeFixerPackageInfo.DisplayName;
         public override string QualifiedName => KneeFixerPackageInfo.Name;
@@ -19,16 +19,17 @@ namespace KOZ39.KneeFixer
 
             InPhase(BuildPhase.Transforming)
                 .AfterPlugin("nadena.dev.modular-avatar")
+                .BeforePlugin("com.anatawa12.avatar-optimizer")
                 .Run($"{KneeFixerPackageInfo.DisplayName} (Build)", Build);
         }
 
-        private static void Resolve(BuildContext ctx)
+        private static void Resolve(BuildContext context)
         {
-            var (primaryFixer, fixers) = KneeFixerUtility.FindFixers(ctx.AvatarRootObject);
+            var (primaryFixer, fixers) = KneeFixerUtility.FindFixers(context.AvatarRootObject);
 
             if (primaryFixer != null)
             {
-                ctx.GetState<KneeFixerState>().KneeDepth = primaryFixer.EffectiveKneeDepth;
+                context.GetState<KneeFixerState>().KneeDepth = primaryFixer.EffectiveKneeDepth;
             }
 
             foreach (var fixer in fixers)
@@ -37,20 +38,20 @@ namespace KOZ39.KneeFixer
             }
         }
 
-        private static void Build(BuildContext ctx)
+        private static void Build(BuildContext context)
         {
-            var kneeDepth = ctx.GetState<KneeFixerState>().KneeDepth;
+            var kneeDepth = context.GetState<KneeFixerState>().KneeDepth;
 
             if (kneeDepth == null)
             {
                 return;
             }
 
-            var animator = ctx.AvatarRootObject.GetComponent<Animator>();
+            var animator = context.AvatarRootObject.GetComponent<Animator>();
 
             if (animator == null || !animator.isHuman)
             {
-                using (ErrorReport.WithContextObject(ctx.AvatarRootObject))
+                using (ErrorReport.WithContextObject(context.AvatarRootObject))
                 {
                     ErrorReport.ReportError(
                         KneeFixerLocalization.Localizer,

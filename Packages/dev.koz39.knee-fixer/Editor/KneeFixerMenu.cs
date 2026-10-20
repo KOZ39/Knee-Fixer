@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -43,23 +42,24 @@ namespace KOZ39.KneeFixer
             var undoGroup = Undo.GetCurrentGroup();
             Undo.SetCurrentGroupName($"Setup {KneeFixerPackageInfo.DisplayName}");
 
-            var instances = new List<GameObject>(targets.Length);
-
-            foreach (var target in targets)
-            {
-                var instance = SetupAvatar(target, prefab);
-
-                if (instance == null)
-                {
-                    continue;
-                }
-
-                instances.Add(instance);
-            }
+            var created = targets
+                .Select(target => SetupAvatar(target, prefab))
+                .Where(instance => instance != null)
+                .ToArray();
 
             Undo.CollapseUndoOperations(undoGroup);
 
-            SelectInstances(instances);
+            if (created.Length == 0)
+            {
+                return;
+            }
+
+            Selection.objects = created;
+
+            if (created.Length == 1)
+            {
+                EditorGUIUtility.PingObject(created[0]);
+            }
         }
 
         private static GameObject[] GetTargetAvatars(GameObject context = null) =>
@@ -92,28 +92,27 @@ namespace KOZ39.KneeFixer
             return prefab;
         }
 
-        private static GameObject SetupAvatar(GameObject target, GameObject prefab)
+        private static GameObject SetupAvatar(GameObject avatar, GameObject prefab)
         {
             var displayName = KneeFixerPackageInfo.DisplayName;
-            var (primaryFixer, _) = KneeFixerUtility.FindFixers(target);
 
-            if (primaryFixer != null)
+            if (KneeFixerUtility.FindFixers(avatar).Primary != null)
             {
                 Debug.LogWarning(
-                    $"{KneeFixerPackageInfo.LogPrefix} Skipped avatar '{target.name}': {displayName} already exists.",
-                    target
+                    $"{KneeFixerPackageInfo.LogPrefix} Skipped avatar '{avatar.name}': {displayName} already exists.",
+                    avatar
                 );
 
                 return null;
             }
 
-            var instance = PrefabUtility.InstantiatePrefab(prefab, target.transform) as GameObject;
+            var instance = PrefabUtility.InstantiatePrefab(prefab, avatar.transform) as GameObject;
 
             if (instance == null)
             {
                 Debug.LogError(
-                    $"{KneeFixerPackageInfo.LogPrefix} Failed to set up {displayName} on avatar '{target.name}'.",
-                    target
+                    $"{KneeFixerPackageInfo.LogPrefix} Failed to set up {displayName} on avatar '{avatar.name}'.",
+                    avatar
                 );
 
                 return null;
@@ -122,21 +121,6 @@ namespace KOZ39.KneeFixer
             Undo.RegisterCreatedObjectUndo(instance, $"Setup {displayName}");
 
             return instance;
-        }
-
-        private static void SelectInstances(List<GameObject> instances)
-        {
-            if (instances.Count == 0)
-            {
-                return;
-            }
-
-            Selection.objects = instances.ToArray();
-
-            if (instances.Count == 1)
-            {
-                EditorGUIUtility.PingObject(instances[0]);
-            }
         }
     }
 }

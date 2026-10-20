@@ -230,13 +230,7 @@ namespace KOZ39.KneeFixer
                     continue;
                 }
 
-                foreach (var avatarFixer in fixers)
-                {
-                    if (!duplicateFixers.Contains(avatarFixer))
-                    {
-                        duplicateFixers.Add(avatarFixer);
-                    }
-                }
+                duplicateFixers.AddRange(fixers.Except(duplicateFixers));
 
                 if (fixer == primaryFixer)
                 {
@@ -411,8 +405,8 @@ namespace KOZ39.KneeFixer
                     position,
                     scope.content,
                     kneeDepth,
-                    -0.02f,
-                    0.02f
+                    KneeFixer.MinKneeDepth,
+                    KneeFixer.MaxKneeDepth
                 );
 
                 if (!EditorGUI.EndChangeCheck())

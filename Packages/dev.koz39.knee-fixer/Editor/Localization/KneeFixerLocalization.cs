@@ -15,7 +15,7 @@ namespace KOZ39.KneeFixer
             "en-US",
             () =>
                 AssetDatabase
-                    .FindAssets("t:Object", new[] { Folder })
+                    .FindAssets("t:LocalizationAsset", new[] { Folder })
                     .Select(guid =>
                         AssetDatabase.LoadAssetAtPath<LocalizationAsset>(
                             AssetDatabase.GUIDToAssetPath(guid)
