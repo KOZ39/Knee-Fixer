@@ -33,7 +33,7 @@ msgid "messages.DuplicateSomeIgnored"
 msgstr "Multiple Knee Fixer components were found. Some selected components will be ignored."
 
 msgid "messages.NoAvatar"
-msgstr "Place this component inside an avatar with a VRC Avatar Descriptor."
+msgstr "Move this component under an avatar with a VRC Avatar Descriptor."
 
 msgid "messages.Excluded"
 msgstr "This component is under an EditorOnly object or another avatar and will be ignored."
@@ -43,7 +43,7 @@ msgstr "Some selected components are under an EditorOnly object or another avata
 
 #. {0}: left or right, {1}: bone name
 msgid "warnings.ConstrainedLeg"
-msgstr "Skipped the {0} leg: '{1}' is already driven by a Position Constraint or Parent Constraint."
+msgstr "Knee Fixer was not applied to the {0} leg: bone '{1}' is already driven by a Position Constraint or Parent Constraint."
 
 msgid "warnings.InvalidAvatar"
 msgstr "Knee Fixer was not applied: the avatar root needs a Humanoid Animator."

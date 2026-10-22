@@ -33,7 +33,7 @@ msgid "messages.DuplicateSomeIgnored"
 msgstr "存在多個 Knee Fixer 元件。部分所選元件將被忽略。"
 
 msgid "messages.NoAvatar"
-msgstr "請將此元件放在帶有 VRC Avatar Descriptor 的 Avatar 內。"
+msgstr "請將此元件移到帶有 VRC Avatar Descriptor 的 Avatar 下。"
 
 msgid "messages.Excluded"
 msgstr "此元件位於 EditorOnly 物件或其他 Avatar 下，將被忽略。"
@@ -43,7 +43,7 @@ msgstr "部分所選元件位於 EditorOnly 物件或其他 Avatar 下，將被�
 
 #. {0}: 左或右, {1}: 骨骼名稱
 msgid "warnings.ConstrainedLeg"
-msgstr "已略過{0}腿。「{1}」已由 Position Constraint 或 Parent Constraint 驅動。"
+msgstr "骨骼「{1}」已由 Position Constraint 或 Parent Constraint 驅動，未對{0}腿套用 Knee Fixer。"
 
 msgid "warnings.InvalidAvatar"
 msgstr "Avatar 根物件沒有 Humanoid Animator，未套用 Knee Fixer。"

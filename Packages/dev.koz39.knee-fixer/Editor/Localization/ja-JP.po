@@ -33,7 +33,7 @@ msgid "messages.DuplicateSomeIgnored"
 msgstr "Knee Fixerコンポーネントが複数あります。選択したコンポーネントの一部は無視されます。"
 
 msgid "messages.NoAvatar"
-msgstr "このコンポーネントをVRC Avatar Descriptorがあるアバターの中に配置してください。"
+msgstr "VRC Avatar Descriptorがあるアバターの下にこのコンポーネントを移動してください。"
 
 msgid "messages.Excluded"
 msgstr "このコンポーネントはEditorOnlyオブジェクトまたは別のアバターの下にあるため無視されます。"
@@ -43,7 +43,7 @@ msgstr "選択したコンポーネントの一部はEditorOnlyオブジェク�
 
 #. {0}: 左または右, {1}: ボーン名
 msgid "warnings.ConstrainedLeg"
-msgstr "{0}脚をスキップしました。「{1}」はすでにPosition ConstraintまたはParent Constraintで動いています。"
+msgstr "ボーン「{1}」はすでにPosition ConstraintまたはParent Constraintで動くため、{0}脚にKnee Fixerを適用しませんでした。"
 
 msgid "warnings.InvalidAvatar"
 msgstr "アバターのルートにHumanoid Animatorがないため、Knee Fixerを適用しませんでした。"
