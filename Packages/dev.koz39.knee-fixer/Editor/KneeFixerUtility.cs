@@ -7,7 +7,7 @@ namespace KOZ39.KneeFixer
 {
     internal static class KneeFixerUtility
     {
-        // NDMF builds the outermost avatar, so the inspector must judge fixers against the same root.
+        // NDMF builds the outermost avatar, so the inspector must judge fixers by that root.
         internal static GameObject FindAvatarRoot(KneeFixer fixer)
         {
             var descriptors = fixer.GetComponentsInParent<VRCAvatarDescriptor>(true);
@@ -31,7 +31,6 @@ namespace KOZ39.KneeFixer
             return (fixers.FirstOrDefault(), fixers);
         }
 
-        // Objects under an EditorOnly object never reach the build, and those under a nested avatar belong to it.
         private static bool IsIncluded(Transform target, Transform avatarRoot)
         {
             for (var t = target; t != avatarRoot.parent; t = t.parent)

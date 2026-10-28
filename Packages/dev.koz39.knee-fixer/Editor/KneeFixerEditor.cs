@@ -137,7 +137,6 @@ namespace KOZ39.KneeFixer
             EditorGUILayout.Space();
         }
 
-        // A fixer outside an avatar stays editable, for example in a prefab added to an avatar later.
         private bool DrawAvatarWarnings()
         {
             var fixers = targets.Cast<KneeFixer>().ToArray();
@@ -165,7 +164,6 @@ namespace KOZ39.KneeFixer
             return isExcluded;
         }
 
-        // FindFixers skips EditorOnly objects and nested avatars, so the build never uses these fixers.
         private static bool IsExcluded(KneeFixer fixer)
         {
             var avatarRoot = KneeFixerUtility.FindAvatarRoot(fixer);
@@ -301,7 +299,6 @@ namespace KOZ39.KneeFixer
             {
                 var currentPreset = (KneeFixerPreset)_presetProperty.objectReferenceValue;
                 var hasMixedPresets = _presetProperty.hasMultipleDifferentValues;
-                // A slash makes a submenu in the dropdown, but the button shows the label on one line.
                 var label = hasMixedPresets
                     ? "\u2014"
                     : GetLabel(currentPreset).Replace("/", " - ");

@@ -148,8 +148,8 @@ namespace KOZ39.KneeFixer
 
         private static void SetupConstraints(GameObject knee, Transform lower, GameObject target)
         {
-            // A single source's weight is normalized by the SDK, so only GlobalWeight could halve the rotation.
-            // Keep GlobalWeight at 1; 0.5 would make the knee follow only half of the lower leg's rotation.
+            // The SDK normalizes one source's weight, so only GlobalWeight can halve the rotation.
+            // Keep GlobalWeight at 1; at 0.5 the knee follows only half the lower leg's rotation.
             SetupConstraint<VRCRotationConstraint>(knee, lower);
             SetupConstraint<VRCPositionConstraint>(lower.gameObject, target.transform);
         }

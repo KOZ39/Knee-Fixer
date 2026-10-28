@@ -12,7 +12,7 @@ namespace KOZ39.KneeFixer
 
         protected override void Configure()
         {
-            // Before Modular Avatar moves objects, so the fixer used matches the one the inspector shows.
+            // Before Modular Avatar moves objects, so the build uses the fixer the inspector shows.
             InPhase(BuildPhase.Resolving)
                 .BeforePlugin("nadena.dev.modular-avatar")
                 .Run($"{KneeFixerPackageInfo.DisplayName} (Resolve)", Resolve);
