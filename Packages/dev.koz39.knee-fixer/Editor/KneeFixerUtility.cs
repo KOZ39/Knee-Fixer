@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
@@ -17,11 +16,6 @@ namespace KOZ39.KneeFixer
 
         internal static (KneeFixer Primary, KneeFixer[] All) FindFixers(GameObject avatarRoot)
         {
-            if (avatarRoot == null)
-            {
-                return (null, Array.Empty<KneeFixer>());
-            }
-
             var fixers = avatarRoot
                 .GetComponentsInChildren<KneeFixer>(true)
                 .Where(fixer => IsIncluded(fixer.transform, avatarRoot.transform))
