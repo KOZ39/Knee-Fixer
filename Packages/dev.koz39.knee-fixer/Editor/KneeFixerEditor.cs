@@ -58,7 +58,11 @@ namespace KOZ39.KneeFixer
         {
             _presets = AssetDatabase
                 .FindAssets("t:KneeFixerPreset")
-                .Select(LoadPreset)
+                .Select(guid =>
+                    AssetDatabase.LoadAssetAtPath<KneeFixerPreset>(
+                        AssetDatabase.GUIDToAssetPath(guid)
+                    )
+                )
                 .Where(preset => preset != null)
                 .OrderBy(GetDisplayName)
                 .ThenBy(preset => preset.name)
@@ -72,21 +76,6 @@ namespace KOZ39.KneeFixer
                 .ToHashSet();
 
             Repaint();
-        }
-
-        private static KneeFixerPreset LoadPreset(string guid)
-        {
-            var path = AssetDatabase.GUIDToAssetPath(guid);
-            var preset = AssetDatabase.LoadAssetAtPath<KneeFixerPreset>(path);
-
-            if (preset == null)
-            {
-                Debug.LogWarning(
-                    $"{KneeFixerPackageInfo.LogPrefix} Failed to load a preset from '{path}' (GUID: {guid})."
-                );
-            }
-
-            return preset;
         }
 
         private static string GetDisplayName(KneeFixerPreset preset)
