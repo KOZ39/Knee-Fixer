@@ -29,7 +29,13 @@ namespace KOZ39.KneeFixer
 
             if (primaryFixer != null)
             {
-                context.GetState<KneeFixerState>().KneeDepth = primaryFixer.EffectiveKneeDepth;
+                var state = context.GetState<KneeFixerState>();
+                state.KneeDepth = primaryFixer.EffectiveKneeDepth;
+
+                if (primaryFixer.preset != null)
+                {
+                    state.OutlineZBias = primaryFixer.preset.outlineZBias;
+                }
             }
 
             foreach (var fixer in fixers)
@@ -40,7 +46,8 @@ namespace KOZ39.KneeFixer
 
         private static void Build(BuildContext context)
         {
-            var kneeDepth = context.GetState<KneeFixerState>().KneeDepth;
+            var state = context.GetState<KneeFixerState>();
+            var kneeDepth = state.KneeDepth;
 
             if (kneeDepth == null)
             {
@@ -64,11 +71,21 @@ namespace KOZ39.KneeFixer
             }
 
             KneeFixerBuilder.Build(animator, kneeDepth.Value);
+
+            // 0 means the preset leaves the material's own Z Bias as it is.
+            if (state.OutlineZBias != 0f)
+            {
+                KneeFixerOutline.SetSkinZBias(
+                    context.AvatarRootObject.transform,
+                    state.OutlineZBias
+                );
+            }
         }
 
         private class KneeFixerState
         {
             public float? KneeDepth;
+            public float OutlineZBias;
         }
     }
 }

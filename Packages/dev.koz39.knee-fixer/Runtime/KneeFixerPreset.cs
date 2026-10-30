@@ -10,5 +10,7 @@ namespace KOZ39.KneeFixer
         public string displayName;
 
         public float kneeDepth;
+
+        public float outlineZBias;
     }
 }

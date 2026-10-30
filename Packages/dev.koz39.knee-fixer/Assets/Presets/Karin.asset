@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: "Karin (\u30AB\u30EA\u30F3)"
   kneeDepth: -0.01
+  outlineZBias: 0.001

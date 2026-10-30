@@ -1,5 +1,14 @@
 # 변경 내역
 
+## Unreleased
+
+### Added
+
+- 프리셋 에셋의 Outline Z Bias
+    - 아바타 빌드 시 lilToon 피부 머티리얼에 한해 적용
+    - 값이 설정된 프리셋
+        - Karin(0.001)
+
 ## v2.4.0 (2026-10-22)
 
 ### Changed
