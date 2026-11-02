@@ -1,5 +1,11 @@
 # 변경 내역
 
+## Unreleased
+
+### Fixed
+
+- Outline Z Bias 적용 시 AAO Merge Material이 피부 머티리얼을 찾지 못하는 문제
+
 ## v2.5.0 (2026-11-02)
 
 ### Added

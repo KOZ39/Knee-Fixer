@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using nadena.dev.ndmf;
 using UnityEngine;
 
 namespace KOZ39.KneeFixer
@@ -27,6 +28,7 @@ namespace KOZ39.KneeFixer
             }
 
             Material copy = new(skinMaterial);
+            ObjectRegistry.RegisterReplacedObject(skinMaterial, copy);
             copy.SetFloat(OutlineZBiasProperty, zBias);
 
             foreach (var renderer in avatarRoot.GetComponentsInChildren<Renderer>(true))
