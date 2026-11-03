@@ -1,5 +1,11 @@
 # 변경 내역
 
+## Unreleased
+
+### Fixed
+
+- Armature·Hips·UpperLeg 스케일을 변경한 아바타의 무릎 위치 오류
+
 ## v2.5.1 (2026-11-03)
 
 ### Fixed

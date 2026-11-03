@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using nadena.dev.ndmf;
 using UnityEngine;
 using UnityEngine.Animations;
@@ -15,6 +16,7 @@ namespace KOZ39.KneeFixer
         internal static void Build(Animator animator, float kneeDepth)
         {
             var positionDrivenTransforms = CollectPositionDrivenTransforms(animator.transform);
+            var skeleton = animator.avatar.humanDescription.skeleton;
 
             BuildSide(
                 animator,
@@ -22,6 +24,7 @@ namespace KOZ39.KneeFixer
                 HumanBodyBones.LeftLowerLeg,
                 "L",
                 kneeDepth,
+                skeleton,
                 positionDrivenTransforms
             );
 
@@ -31,6 +34,7 @@ namespace KOZ39.KneeFixer
                 HumanBodyBones.RightLowerLeg,
                 "R",
                 kneeDepth,
+                skeleton,
                 positionDrivenTransforms
             );
         }
@@ -73,6 +77,7 @@ namespace KOZ39.KneeFixer
             HumanBodyBones lowerBone,
             string side,
             float kneeDepth,
+            SkeletonBone[] skeleton,
             HashSet<Transform> positionDrivenTransforms
         )
         {
@@ -100,7 +105,8 @@ namespace KOZ39.KneeFixer
                 return;
             }
 
-            var knee = CreateKnee(upper, lower, side, kneeDepth, animator.transform);
+            var pivotZ = KneePivotZ(animator.transform, upper, lower, skeleton, kneeDepth);
+            var knee = CreateKnee(upper, lower, side, pivotZ, animator.transform);
             var target = CreateTarget(lower, knee, side);
 
             SetupConstraints(knee, lower, target);
@@ -110,13 +116,13 @@ namespace KOZ39.KneeFixer
             Transform upper,
             Transform lower,
             string side,
-            float kneeDepth,
+            float pivotZ,
             Transform avatarRoot
         )
         {
             var knee = new GameObject($"{NamePrefix}Knee.{side}");
 
-            var position = CalculateKneePosition(avatarRoot, lower.position, kneeDepth);
+            var position = CalculateKneePosition(avatarRoot, lower.position, pivotZ);
 
             knee.transform.SetPositionAndRotation(position, lower.rotation);
             knee.transform.SetParent(upper, true);
@@ -134,6 +140,58 @@ namespace KOZ39.KneeFixer
             localPosition.z = localZ;
 
             return avatarRoot.TransformPoint(localPosition);
+        }
+
+        // Knee Depth is a z on the avatar as imported, so the pivot keeps its distance behind the
+        // knee in proportion when an Armature, Hips or UpperLeg is rescaled.
+        private static float KneePivotZ(
+            Transform avatarRoot,
+            Transform upper,
+            Transform lower,
+            SkeletonBone[] skeleton,
+            float kneeDepth
+        )
+        {
+            var importedUpper = ImportedMatrix(avatarRoot, upper, skeleton);
+            var importedLower = ImportedMatrix(avatarRoot, lower, skeleton);
+
+            if (importedUpper == null || importedLower == null)
+            {
+                return kneeDepth;
+            }
+
+            var currentUpper = avatarRoot.worldToLocalMatrix * upper.localToWorldMatrix;
+            var scale = Mathf.Pow(
+                currentUpper.determinant / importedUpper.Value.determinant,
+                1f / 3
+            );
+
+            return avatarRoot.InverseTransformPoint(lower.position).z
+                - scale * (importedLower.Value.m23 - kneeDepth);
+        }
+
+        private static Matrix4x4? ImportedMatrix(
+            Transform avatarRoot,
+            Transform bone,
+            SkeletonBone[] skeleton
+        )
+        {
+            var matrix = Matrix4x4.identity;
+
+            for (var t = bone; t != avatarRoot; t = t.parent)
+            {
+                var imported = skeleton.FirstOrDefault(entry => entry.name == t.name);
+
+                if (imported.name == null)
+                {
+                    return null;
+                }
+
+                matrix =
+                    Matrix4x4.TRS(imported.position, imported.rotation, imported.scale) * matrix;
+            }
+
+            return matrix;
         }
 
         private static GameObject CreateTarget(Transform lower, GameObject knee, string side)
