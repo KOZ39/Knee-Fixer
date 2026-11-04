@@ -2,6 +2,10 @@
 
 ## v2.5.2 (2026-11-04)
 
+### Changed
+
+- Armature·Hips·UpperLeg 이동·회전 시 무릎 깊이를 현재 무릎 위치 기준으로 적용
+
 ### Fixed
 
 - Armature·Hips·UpperLeg 스케일을 변경한 아바타의 무릎 위치 오류
