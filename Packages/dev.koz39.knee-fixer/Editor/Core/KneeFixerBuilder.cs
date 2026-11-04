@@ -142,8 +142,9 @@ namespace KOZ39.KneeFixer
             return avatarRoot.TransformPoint(localPosition);
         }
 
-        // Knee Depth is a z on the avatar as imported, so the pivot keeps its distance behind the
-        // knee in proportion when an Armature, Hips or UpperLeg is rescaled.
+        // Knee Depth is a z on the avatar as imported.
+        // The pivot follows the knee when an Armature, Hips or UpperLeg moves or turns, and its
+        // distance behind the knee scales with the UpperLeg's scale along the avatar's depth.
         private static float KneePivotZ(
             Transform avatarRoot,
             Transform upper,
@@ -161,13 +162,11 @@ namespace KOZ39.KneeFixer
             }
 
             var currentUpper = avatarRoot.worldToLocalMatrix * upper.localToWorldMatrix;
-            var scale = Mathf.Pow(
-                currentUpper.determinant / importedUpper.Value.determinant,
-                1f / 3
-            );
+            var depthAxis = importedUpper.Value.inverse.MultiplyVector(Vector3.forward);
+            var depthScale = currentUpper.MultiplyVector(depthAxis).magnitude;
 
             return avatarRoot.InverseTransformPoint(lower.position).z
-                - scale * (importedLower.Value.m23 - kneeDepth);
+                - depthScale * (importedLower.Value.m23 - kneeDepth);
         }
 
         private static Matrix4x4? ImportedMatrix(

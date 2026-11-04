@@ -1,5 +1,12 @@
 # 변경 내역
 
+## Unreleased
+
+### Fixed
+
+- Armature·Hips·UpperLeg 스케일을 축마다 다르게 변경한 아바타의 무릎 위치 오류
+- Armature·Hips·UpperLeg 스케일의 한 축을 음수로 변경한 아바타의 무릎 위치 오류
+
 ## v2.5.2 (2026-11-04)
 
 ### Changed
