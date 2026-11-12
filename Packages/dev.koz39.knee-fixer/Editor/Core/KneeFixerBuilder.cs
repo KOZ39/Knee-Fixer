@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Animations;
 using VRC.Dynamics;
 using VRC.SDK3.Dynamics.Constraint.Components;
+using static KOZ39.KneeFixer.KneeFixerLocalization;
 
 namespace KOZ39.KneeFixer
 {
@@ -97,7 +98,7 @@ namespace KOZ39.KneeFixer
                         KneeFixerLocalization.Localizer,
                         ErrorSeverity.NonFatal,
                         "warnings.ConstrainedLeg",
-                        KneeFixerLocalization.Text(side == "L" ? "labels.Left" : "labels.Right"),
+                        Text(side == "L" ? "labels.Left" : "labels.Right"),
                         lower.name
                     );
                 }
