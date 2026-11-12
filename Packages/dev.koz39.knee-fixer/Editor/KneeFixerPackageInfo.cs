@@ -12,6 +12,6 @@ namespace KOZ39.KneeFixer
             typeof(KneeFixerPackageInfo).Assembly
         );
 
-        internal static string Version => _info?.version ?? "unknown";
+        internal static string Version => _info.version;
     }
 }
