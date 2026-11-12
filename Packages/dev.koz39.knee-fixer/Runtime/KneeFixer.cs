@@ -12,8 +12,6 @@ namespace KOZ39.KneeFixer
             MaxKneeDepth = 0.02f;
 
         public KneeFixerPreset preset;
-
-        [Range(MinKneeDepth, MaxKneeDepth)]
         public float kneeDepth = -0.01f;
 
         public float EffectiveKneeDepth => preset != null ? preset.kneeDepth : kneeDepth;
