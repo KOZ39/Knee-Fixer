@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: "Eku (\u30A8\u30AF)"
   kneeDepth: 0.01
+  outlineZBias: 0

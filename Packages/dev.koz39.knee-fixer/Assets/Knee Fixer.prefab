@@ -44,5 +44,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06fc52081dea1e24da750f1d5f93416c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  preset: 0
+  preset: {fileID: 0}
   kneeDepth: -0.01

@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: "Riru (\u308A\u308B)"
   kneeDepth: 0.01
+  outlineZBias: 0

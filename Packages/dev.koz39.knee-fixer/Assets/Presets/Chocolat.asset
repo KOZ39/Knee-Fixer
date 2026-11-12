@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: "Chocolat (\u30B7\u30E7\u30B3\u30E9)"
   kneeDepth: -0.01
+  outlineZBias: 0

@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: "Manuka (\u30DE\u30CC\u30AB)/Style B"
   kneeDepth: 0.015
+  outlineZBias: 0

@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   displayName: "Rinasciita (\u30EA\u30CA\u30B7\u30FC\u30BF)"
   kneeDepth: 0
+  outlineZBias: 0
