@@ -352,6 +352,7 @@ namespace KOZ39.KneeFixer
             foreach (var fixer in targets.Cast<KneeFixer>())
             {
                 using var serializedFixer = new SerializedObject(fixer);
+                // Keeps the preset's value even beyond the slider limits.
                 serializedFixer.FindProperty(nameof(KneeFixer.kneeDepth)).floatValue =
                     fixer.EffectiveKneeDepth;
                 serializedFixer.ApplyModifiedProperties();
